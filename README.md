@@ -1,4 +1,4 @@
-# proficiencyTesting
+# ept
 
 This application was generated using JHipster 9.1.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v9.1.0](https://www.jhipster.tech/documentation-archive/v9.1.0).
 
@@ -47,13 +47,6 @@ You will only need to run this command when dependencies change in [package.json
 ```
 
 We use npm scripts and Webpack as our build system.
-
-If you are using hazelcast as a cache, you will have to launch a cache server.
-To start your cache server, run:
-
-```bash
-docker compose -f src/main/docker/hazelcast-management-center.yml up -d
-```
 
 Run the following commands in two separate terminals to create a blissful development experience where your browser
 auto-refreshes when files change on your hard drive.
@@ -110,7 +103,7 @@ For further instructions on how to develop with JHipster, have a look at [Using 
 
 ### Packaging as jar
 
-To build the final jar and optimize the proficiencyTesting application for production, run:
+To build the final jar and optimize the ept application for production, run:
 
 ```bash
 ./mvnw -Pprod clean verify

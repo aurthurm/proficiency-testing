@@ -1,8 +1,8 @@
 {
-  "name": "proficiency-testing",
+  "name": "ept",
   "version": "0.0.1-SNAPSHOT",
   "private": true,
-  "description": "Description for Proficiency Testing",
+  "description": "Description for Ept",
   "license": "UNLICENSED",
   "type": "module",
   "scripts": {
