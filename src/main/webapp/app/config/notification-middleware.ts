@@ -24,7 +24,7 @@ const getFieldErrorsToasts = (fieldErrors: FieldErrorVM[]): ToastMessage[] =>
     }
     // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
     const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
-    const fieldName = translate(`proficiencyTestingApp.${fieldError.objectName}.${convertedField}`);
+    const fieldName = translate(`eptApp.${fieldError.objectName}.${convertedField}`);
     return { message: `Error on field "${fieldName}"`, key: `error.${fieldError.message}`, data: { fieldName } };
   });
 

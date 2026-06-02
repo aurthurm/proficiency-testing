@@ -1,8 +1,8 @@
 {
-  "name": "proficiency-testing",
+  "name": "ept",
   "version": "0.0.1-SNAPSHOT",
   "private": true,
-  "description": "Description for Proficiency Testing",
+  "description": "Description for Ept",
   "license": "UNLICENSED",
   "type": "module",
   "scripts": {
@@ -34,8 +34,8 @@
     "cypress": "cypress open --e2e",
     "docker:consul:down": "docker compose -f src/main/docker/consul.yml down -v",
     "docker:consul:up": "docker compose -f src/main/docker/consul.yml up --wait",
-    "docker:db:down": "docker compose -f src/main/docker/postgresql.yml down -v",
-    "docker:db:up": "docker compose -f src/main/docker/postgresql.yml up --wait",
+    "docker:db:down": "docker compose -f src/main/docker/mysql.yml down -v",
+    "docker:db:up": "docker compose -f src/main/docker/mysql.yml up --wait",
     "e2e": "npm run e2e:cypress:headed --",
     "e2e:cypress": "cypress run --e2e --browser chrome",
     "e2e:cypress:headed": "npm run e2e:cypress -- --headed",

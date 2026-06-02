@@ -47,7 +47,11 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
                             throw new RuntimeException(e);
                         }
                     }
-                    testValues = testValues.and("spring.datasource.url=" + prodTestcontainer.getTestContainer().getJdbcUrl() + "");
+                    testValues = testValues.and(
+                        "spring.datasource.url=" +
+                            prodTestcontainer.getTestContainer().getJdbcUrl() +
+                            "?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true"
+                    );
                     testValues = testValues.and("spring.datasource.username=" + prodTestcontainer.getTestContainer().getUsername());
                     testValues = testValues.and("spring.datasource.password=" + prodTestcontainer.getTestContainer().getPassword());
                 }
