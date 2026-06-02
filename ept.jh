@@ -1,0 +1,657 @@
+// ============================================================================
+// ePT (Electronic Proficiency Testing) — Domain Model
+// JHipster 8.x  |  Greenfield modernization (NOT bound to legacy PHP schema)
+// ----------------------------------------------------------------------------
+// Design principles applied:
+//   * Boolean instead of legacy "yes"/"no" String flags
+//   * Enums instead of free-text status strings
+//   * Results modelled by MODALITY (qualitative/quantitative), not per-scheme
+//     tables; scheme-specific dimensions carried by the Assay reference entity
+//   * Reference/catalog data normalised into proper entities (no numbered
+//     custom_field columns; an EAV pair is used instead)
+//   * Auth state (password reset, activation, last login) lives on the
+//     built-in JHipster User entity — NOT duplicated on DataManager
+//   * Spring Data JPA auditing (createdBy/createdDate/...) is intended via a
+//     shared base class added after generation; explicit audit columns are
+//     kept only where they carry domain meaning
+// ============================================================================
+
+application {
+  config {
+    baseName ept
+    packageName com.ept
+    applicationType monolith
+    authenticationType jwt
+    databaseType sql
+    prodDatabaseType mysql
+    devDatabaseType h2Disk
+    cacheProvider no
+    enableHibernateCache false
+    buildTool maven
+    clientFramework react
+    testFrameworks [cypress]
+    jhiPrefix jhi
+    nativeLanguage en
+    languages [en]
+  }
+}
+
+// ----------------------------------------------------------------------------
+// ENUMS
+// ----------------------------------------------------------------------------
+enum Status { ACTIVE, INACTIVE, PENDING }
+
+enum SchemeType { DTS, VL, EID, COVID19, TB, RECENCY, GENERIC }
+
+enum ResultModality { QUALITATIVE, QUANTITATIVE, SEMI_QUANTITATIVE }
+
+enum DataManagerRole { MANAGER, PTCC }
+
+enum EnrollmentStatus { ENROLLED, SUSPENDED, WITHDRAWN }
+
+enum DistributionStatus { DRAFT, OPEN, SHIPPED, CLOSED }
+
+enum ShipmentStatus {
+  DRAFT,
+  CONFIGURED,
+  READY,
+  QUEUED,
+  SHIPPED,
+  RESPONSES_OPEN,
+  RESPONSES_CLOSED,
+  EVALUATING,
+  EVALUATED,
+  REPORTS_GENERATED,
+  FINALIZED
+}
+
+enum ResponseStatus { NOT_STARTED, IN_PROGRESS, SUBMITTED, LATE, NOT_TESTED, NO_RESPONSE }
+
+enum FinalResult { PASS, FAIL, EXCLUDED, NOT_EVALUATED }
+
+enum QcStatus { PENDING, PASSED, FAILED }
+
+enum AssayType {
+  DTS_ALGORITHM,
+  VL_ASSAY,
+  EID_DETECTION_ASSAY,
+  EID_EXTRACTION_ASSAY,
+  TB_ASSAY,
+  COVID19_GENE
+}
+
+enum CertificateType { PARTICIPATION, EXCELLENCE }
+
+enum CertificateBatchStatus { PENDING, GENERATING, GENERATED, APPROVED, DISTRIBUTING, DISTRIBUTED, FAILED }
+
+enum JobType {
+  EVALUATION,
+  REPORT_GENERATION,
+  CERTIFICATE_GENERATION,
+  CERTIFICATE_DISTRIBUTION,
+  EMAIL_DISPATCH,
+  DEADLINE_PROCESSING,
+  STALE_CLEANUP
+}
+
+enum JobStatus { PENDING, RUNNING, COMPLETED, FAILED, CANCELLED, STALE }
+
+enum EmailStatus { PENDING, SENT, FAILED, RETRYING }
+
+enum LoginStatus { SUCCESS, FAILED, BANNED }
+
+enum AuditAction { LOGIN, LOGOUT, CREATE, UPDATE, DELETE, DOWNLOAD, EVALUATE, FINALIZE, EXPORT, IMPERSONATE }
+
+enum ContentStatus { PUBLISHED, DRAFT, ARCHIVED }
+
+enum CustomFieldType { TEXT, NUMBER, DATE, BOOLEAN, SELECT }
+
+// ----------------------------------------------------------------------------
+// IDENTITY & ACCESS
+// ----------------------------------------------------------------------------
+
+/** DM / PTCC participant-side login. Wraps the built-in JHipster User. */
+entity DataManager {
+  firstName String
+  lastName String
+  institute String
+  primaryEmail String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+  secondaryEmail String pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+  phone String
+  mobile String
+  language String
+  role DataManagerRole required
+  status Status required
+  qcAccess Boolean
+  viewOnlyAccess Boolean
+  enableTestResponseDate Boolean
+  enableModeOfReceipt Boolean
+  forceProfileCheck Boolean
+}
+
+/** Testing site / laboratory. */
+entity Participant {
+  uniqueIdentifier String required unique
+  instituteName String required
+  departmentName String
+  email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+  additionalEmail String pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+  address String
+  shippingAddress String
+  city String
+  state String
+  district String
+  zip String
+  region String
+  phone String
+  mobile String
+  affiliation String required
+  networkTier String
+  siteType String
+  fundingSource String
+  testingVolume Long
+  pepfarId String
+  latitude Double
+  longitude Double
+  labDirectorName String
+  labDirectorEmail String pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+  contactPersonName String
+  contactPersonEmail String pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+  contactPersonPhone String
+  status Status required
+}
+
+entity Country {
+  isoCode String required unique minlength(2) maxlength(3)
+  name String required unique
+  region String
+}
+
+/** Participant enrolled into a scheme/programme (programme-level membership). */
+entity Enrollment {
+  status EnrollmentStatus required
+  enrolledOn LocalDate required
+  withdrawnOn LocalDate
+}
+
+// ----------------------------------------------------------------------------
+// SCHEME, CONFIG & SURVEY STRUCTURE
+// ----------------------------------------------------------------------------
+
+/** A PT test discipline (DTS, VL, EID, ...). */
+entity Scheme {
+  code String required unique
+  name String required
+  schemeType SchemeType required
+  modality ResultModality required
+  status Status required
+}
+
+/** Versioned scoring/configuration for a scheme (ADM-14). */
+entity SchemeConfiguration {
+  version Integer required
+  effectiveDate LocalDate required
+  passingScore Double required
+  documentationWeight Double
+  allowLateResponse Boolean
+  optionalFields TextBlob
+  scoringRules TextBlob
+  isActive Boolean
+}
+
+/** PT survey grouping shipments. */
+entity Distribution {
+  code String required unique
+  distributionDate LocalDate required
+  status DistributionStatus required
+}
+
+/** PT panel sent to participants. */
+entity Shipment {
+  code String required unique
+  shipmentDate LocalDate required
+  responseDeadline Instant required
+  responsesOpen Boolean
+  autoCloseAtDeadline Boolean
+  allowEditingResponse Boolean
+  issuingAuthority String
+  coordinatorName String
+  coordinatorEmail String pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+  coordinatorPhone String
+  numberOfSamples Integer
+  maxScore Integer
+  status ShipmentStatus required
+  attributes TextBlob
+  reportsGeneratedAt Instant
+  finalizedAt Instant
+}
+
+/** A single sample/control within a shipment panel (shared structure). */
+entity ShipmentSample {
+  label String required
+  displayOrder Integer
+  isControl Boolean
+  isMandatory Boolean
+  sampleScore Double
+  preparationDate LocalDate
+}
+
+// ----------------------------------------------------------------------------
+// RESULTS (typed, modality-based — replaces 9 legacy per-scheme table pairs)
+// ----------------------------------------------------------------------------
+
+/** Expected result for a sample. One row per (sample, assay/algorithm). */
+entity SampleReferenceResult {
+  qualitativeResult String
+  quantitativeValue Double
+  unit String
+  lowerLimit Double
+  upperLimit Double
+  isControlExpected Boolean
+}
+
+/** Participant's reported result for a sample. */
+entity ParticipantResult {
+  reportedQualitativeResult String
+  reportedQuantitativeValue Double
+  unit String
+  lotNumber String
+  expiryDate LocalDate
+  zScore Double
+  calculatedScore Double
+  comments String
+}
+
+/** Participant's instance of a shipment + evaluation summary. */
+entity ShipmentParticipantMap {
+  responseStatus ResponseStatus
+  shipmentReceiptDate LocalDate
+  shipmentTestDate LocalDate
+  shipmentTestReportDate Instant
+  submittedAt Instant
+  evaluatedAt Instant
+  isExcluded Boolean
+  isResponseLate Boolean
+  isPtTestNotPerformed Boolean
+  ptTestNotPerformedComments String
+  supervisorApproved Boolean
+  participantSupervisor String
+  userComment String
+  shipmentScore Double
+  documentationScore Double
+  finalResult FinalResult
+  failureReason TextBlob
+  evaluationComment String
+  isFollowup Boolean
+  manualOverride Boolean
+  qcStatus QcStatus
+  qcDate LocalDate
+  qcDoneBy String
+  syncedToMobile Boolean
+  syncedOn Instant
+}
+
+// ----------------------------------------------------------------------------
+// REFERENCE / CATALOG DATA
+// ----------------------------------------------------------------------------
+
+/** Scheme-specific dimension: DTS algorithm, VL/EID/TB assay, COVID gene, etc. */
+entity Assay {
+  name String required
+  assayType AssayType required
+  manufacturer String
+  status Status required
+}
+
+entity TestKit {
+  name String required
+  manufacturer String
+  status Status required
+}
+
+entity ModeOfReceipt {
+  name String required
+  status Status required
+}
+
+entity NotTestedReason {
+  reason String required
+  status Status required
+}
+
+// ----------------------------------------------------------------------------
+// CORRECTIVE ACTION / CAPA
+// ----------------------------------------------------------------------------
+
+/** Catalogue of predefined failure reasons + recommended corrective actions. */
+entity CorrectiveAction {
+  title String required
+  description String
+}
+
+/** A logged corrective/preventive action against a participant's shipment. */
+entity CapaRecord {
+  rootCause String
+  actionTaken String
+  actionDate LocalDate
+  status Status
+  followUpDate LocalDate
+}
+
+// ----------------------------------------------------------------------------
+// CERTIFICATES & REPORT CONFIG
+// ----------------------------------------------------------------------------
+
+entity CertificateTemplate {
+  certificateType CertificateType required
+  fileRef String
+  detectedFields TextBlob
+}
+
+entity CertificateBatch {
+  name String required
+  status CertificateBatchStatus required
+  excellenceCount Integer
+  participationCount Integer
+  skippedCount Integer
+  downloadUrl String
+  errorMessage String
+  approvedBy String
+  approvedOn Instant
+}
+
+entity ReportConfiguration {
+  reportHeader String
+  logo String
+  logoRight String
+  layout String
+  format String
+  topMargin Integer
+  instituteAddressPosition String
+}
+
+// ----------------------------------------------------------------------------
+// COMMUNICATIONS & PUBLIC CONTENT
+// ----------------------------------------------------------------------------
+
+entity MailTemplate {
+  code String required unique
+  subject String
+  htmlBody TextBlob
+  status ContentStatus
+}
+
+/** Outbound email queue with retry/failure tracking. */
+entity EmailMessage {
+  fromEmail String
+  fromName String
+  replyTo String
+  toEmail String required
+  cc String
+  bcc String
+  subject String
+  body TextBlob
+  attachmentRef String
+  status EmailStatus required
+  failureType String
+  failureReason String
+  queuedOn Instant
+  sentAt Instant
+  retryCount Integer
+}
+
+entity Announcement {
+  title String required
+  body TextBlob
+  status ContentStatus required
+  publishedFrom Instant
+  publishedTo Instant
+}
+
+entity ParticipantMessage {
+  subject String
+  body TextBlob
+  isRead Boolean
+  sentAt Instant
+}
+
+/** Public contact-us submissions (PUB-02). */
+entity ContactMessage {
+  name String required
+  email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+  subject String
+  message TextBlob required
+  ipAddress String
+  submittedAt Instant
+  isHandled Boolean
+}
+
+entity HomePageSection {
+  section String required
+  type String
+  title String
+  text TextBlob
+  link String
+  fileRef String
+  icon String
+  displayOrder Integer
+  status ContentStatus required
+}
+
+entity Partner {
+  name String required
+  link String
+  logoRef String
+  sortOrder Integer
+  status ContentStatus required
+}
+
+entity FeedbackQuestion {
+  questionText String required
+  displayOrder Integer
+  status ContentStatus required
+}
+
+entity ParticipantFeedback {
+  answer TextBlob
+  submittedAt Instant
+}
+
+// ----------------------------------------------------------------------------
+// DYNAMIC CUSTOM FIELDS (replaces legacy custom_field1/2 columns, EAV style)
+// ----------------------------------------------------------------------------
+
+entity CustomFieldDefinition {
+  fieldKey String required unique
+  label String required
+  fieldType CustomFieldType required
+  options TextBlob
+  displayOrder Integer
+  status Status required
+}
+
+entity ParticipantCustomValue {
+  value String
+}
+
+// ----------------------------------------------------------------------------
+// OPERATIONS, CONFIG & AUDIT
+// ----------------------------------------------------------------------------
+
+/** System-wide configuration (key/value). */
+entity GlobalConfiguration {
+  configKey String required unique
+  configValue TextBlob
+  description String
+}
+
+/** Background job queue (SCH-01..07). */
+entity ScheduledJob {
+  jobType JobType required
+  status JobStatus required
+  requestedBy String
+  requestedOn Instant
+  startedAt Instant
+  lastHeartbeat Instant
+  completedAt Instant
+  progressCompleted Integer
+  progressTotal Integer
+  summary TextBlob
+}
+
+entity AuditLog {
+  action AuditAction required
+  statement String required
+  performedBy String
+  performedByRole String
+  performedOn Instant required
+  ipAddress String
+  userAgent String
+  sessionHash String
+}
+
+entity UserLoginHistory {
+  loginId String
+  loginContext String
+  loginStatus LoginStatus required
+  attemptedAt Instant required
+  ipAddress String
+  browser String
+  operatingSystem String
+  sessionHash String
+}
+
+/** Mobile-app API request log (API-06). */
+entity ApiRequestLog {
+  transactionId String required
+  requestedBy String
+  requestedOn Instant
+  numberOfRecords Integer
+  requestType String
+  testType String
+  apiUrl String
+  dataFormat String
+}
+
+// ----------------------------------------------------------------------------
+// RELATIONSHIPS
+// ----------------------------------------------------------------------------
+
+// Identity
+relationship OneToOne {
+  DataManager{user} to User with builtInEntity
+}
+relationship ManyToMany {
+  DataManager{participants} to Participant{dataManagers}
+}
+relationship ManyToOne {
+  DataManager{country} to Country
+  Participant{country} to Country
+}
+
+// Enrollment (participant <-> scheme)
+relationship ManyToOne {
+  Enrollment{participant required} to Participant{enrollments}
+  Enrollment{scheme required} to Scheme{enrollments}
+}
+
+// Scheme structure
+relationship OneToMany {
+  Scheme{configurations} to SchemeConfiguration{scheme required}
+  Scheme{correctiveActions} to CorrectiveAction{scheme}
+  Scheme{assays} to Assay{scheme}
+  Scheme{testKits} to TestKit{scheme}
+  Scheme{shipments} to Shipment{scheme required}
+}
+relationship OneToOne {
+  Scheme{certificateTemplate} to CertificateTemplate{scheme}
+}
+
+// Survey / panel structure
+relationship ManyToOne {
+  Shipment{distribution} to Distribution{shipments}
+}
+relationship OneToMany {
+  Shipment{samples} to ShipmentSample{shipment required}
+  Shipment{participantMaps} to ShipmentParticipantMap{shipment required}
+  Participant{shipmentMaps} to ShipmentParticipantMap{participant required}
+}
+
+// Results
+relationship OneToMany {
+  ShipmentSample{referenceResults} to SampleReferenceResult{sample required}
+  ShipmentSample{participantResults} to ParticipantResult{sample required}
+  ShipmentParticipantMap{results} to ParticipantResult{shipmentParticipantMap required}
+}
+relationship ManyToOne {
+  SampleReferenceResult{assay} to Assay
+  ParticipantResult{assay} to Assay
+  ParticipantResult{testKit} to TestKit
+  ShipmentParticipantMap{modeOfReceipt} to ModeOfReceipt
+  ShipmentParticipantMap{notTestedReason} to NotTestedReason
+}
+
+// CAPA
+relationship OneToMany {
+  ShipmentParticipantMap{capaRecords} to CapaRecord{shipmentParticipantMap required}
+}
+relationship ManyToOne {
+  CapaRecord{correctiveAction} to CorrectiveAction
+}
+
+// Certificates
+relationship ManyToMany {
+  CertificateBatch{shipments} to Shipment{certificateBatches}
+}
+relationship ManyToOne {
+  ReportConfiguration{scheme} to Scheme
+}
+
+// Communications
+relationship ManyToOne {
+  EmailMessage{template} to MailTemplate
+  ParticipantMessage{participant required} to Participant
+  ParticipantFeedback{question required} to FeedbackQuestion{answers}
+  ParticipantFeedback{participant required} to Participant
+  ParticipantFeedback{shipment} to Shipment
+}
+
+// Custom fields
+relationship ManyToOne {
+  ParticipantCustomValue{participant required} to Participant{customValues}
+  ParticipantCustomValue{definition required} to CustomFieldDefinition
+}
+
+// ----------------------------------------------------------------------------
+// OPTIONS
+// ----------------------------------------------------------------------------
+paginate DataManager, Participant, Enrollment, Distribution, Shipment with pagination
+paginate ShipmentSample, SampleReferenceResult, ParticipantResult, ShipmentParticipantMap with pagination
+paginate CapaRecord, CertificateBatch, ScheduledJob, EmailMessage with pagination
+paginate AuditLog, UserLoginHistory, ApiRequestLog, ContactMessage, ParticipantMessage with pagination
+paginate Announcement, Scheme, Assay, TestKit with pagination
+
+filter Participant, Enrollment, Shipment, ShipmentParticipantMap, ParticipantResult
+filter Distribution, CapaRecord, AuditLog, EmailMessage, ScheduledJob, UserLoginHistory
+
+dto * with mapstruct
+service all with serviceImpl
+
+// ----------------------------------------------------------------------------
+// POST-GENERATION NOTES
+// ----------------------------------------------------------------------------
+// 1. DEFAULTS: JDL cannot express column defaults. Set them either as field
+//    initialisers in the generated *.java domain classes (regeneration-safe)
+//    or in a dedicated follow-up Liquibase changelog (NOT the generated
+//    *_added_entity_*.xml, which gets overwritten on re-import).
+// 2. AUDITING: enable Spring Data JPA auditing and have core mutable entities
+//    extend AbstractAuditingEntity to get createdBy/createdDate/
+//    lastModifiedBy/lastModifiedDate for free instead of manual columns.
+// 3. EVALUATION: not modelled here (it is service-layer logic). Implement a
+//    SchemeEvaluator strategy interface with per-SchemeType implementations,
+//    dispatched on Scheme.schemeType; results are written back onto
+//    ShipmentParticipantMap (shipmentScore, documentationScore, finalResult,
+//    failureReason) and ParticipantResult (calculatedScore, zScore).
+// 4. DataManager links to User OneToOne (builtInEntity). PTCC vs MANAGER is the
+//    DataManager.role enum; map JHipster authorities ROLE_USER/ROLE_ADMIN to
+//    PT roles in the security config.
