@@ -16,7 +16,6 @@
       "clientConfigServer": "Microservice Config Server",
       "hystrix": "Hystrix",
       "consul": "Consul",
-      "hazelcast": "Hazelcast",
       "diskSpace": "Disk space",
       "ssl": "SSL",
       "mail": "Email",

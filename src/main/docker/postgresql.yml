@@ -1,12 +1,12 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: proficiencytesting
+name: ept
 services:
   postgresql:
     image: postgres:18.4
     # volumes:
-    #   - ~/volumes/jhipster/proficiencyTesting/postgresql/:/var/lib/postgresql/data/
+    #   - ~/volumes/jhipster/ept/postgresql/:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=proficiencyTesting
+      - POSTGRES_USER=ept
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER}']

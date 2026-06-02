@@ -16,7 +16,7 @@ export const Brand = () => (
   <NavbarBrand as={Link as any} to="/" className="brand-logo">
     <BrandIcon />
     <span className="brand-title">
-      <Translate contentKey="global.title">ProficiencyTesting</Translate>
+      <Translate contentKey="global.title">Ept</Translate>
     </span>
     <span className="navbar-version">{VERSION.toLowerCase().startsWith('v') ? VERSION : `v${VERSION}`}</span>
   </NavbarBrand>

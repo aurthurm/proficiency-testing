@@ -52,7 +52,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionTranslator.class);
 
-    @Value("${jhipster.clientApp.name:proficiencyTesting}")
+    @Value("${jhipster.clientApp.name:ept}")
     private String applicationName;
 
     private final Environment env;

@@ -37,4 +37,4 @@ file_env 'SPRING_LIQUIBASE_USER'
 file_env 'SPRING_LIQUIBASE_PASSWORD'
 file_env 'JHIPSTER_REGISTRY_PASSWORD'
 
-exec java ${JAVA_OPTS} -noverify -XX:+AlwaysPreTouch -cp /app/resources/:/app/classes/:/app/libs/* "zw.org.nmrl.ept.ProficiencyTestingApp"  "$@"
+exec java ${JAVA_OPTS} -noverify -XX:+AlwaysPreTouch -cp /app/resources/:/app/classes/:/app/libs/* "zw.org.nmrl.ept.EptApp"  "$@"
