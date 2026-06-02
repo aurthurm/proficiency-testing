@@ -1,0 +1,2 @@
+org.springframework.test.context.ContextCustomizerFactory = \
+    zw.org.nmrl.ept.config.SqlTestContainersSpringContextCustomizerFactory
