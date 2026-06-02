@@ -1,0 +1,25 @@
+{
+  "proficiencyTestingApp": {
+    "modeOfReceipt": {
+      "home": {
+        "title": "Mode Of Receipts",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Mode Of Receipt",
+        "createOrEditLabel": "Create or edit a Mode Of Receipt",
+        "notFound": "No Mode Of Receipts found"
+      },
+      "created": "A new Mode Of Receipt is created with identifier {{ param }}",
+      "updated": "A Mode Of Receipt is updated with identifier {{ param }}",
+      "deleted": "A Mode Of Receipt is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Mode Of Receipt {{ id }}?"
+      },
+      "detail": {
+        "title": "Mode Of Receipt"
+      },
+      "id": "ID",
+      "name": "Name",
+      "status": "Status"
+    }
+  }
+}

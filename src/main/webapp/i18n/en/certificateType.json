@@ -1,0 +1,9 @@
+{
+  "proficiencyTestingApp": {
+    "CertificateType": {
+      "null": "",
+      "PARTICIPATION": "PARTICIPATION",
+      "EXCELLENCE": "EXCELLENCE"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "proficiencyTestingApp": {
+    "homePageSection": {
+      "home": {
+        "title": "Home Page Sections",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Home Page Section",
+        "createOrEditLabel": "Create or edit a Home Page Section",
+        "notFound": "No Home Page Sections found"
+      },
+      "created": "A new Home Page Section is created with identifier {{ param }}",
+      "updated": "A Home Page Section is updated with identifier {{ param }}",
+      "deleted": "A Home Page Section is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Home Page Section {{ id }}?"
+      },
+      "detail": {
+        "title": "Home Page Section"
+      },
+      "id": "ID",
+      "section": "Section",
+      "type": "Type",
+      "title": "Title",
+      "text": "Text",
+      "link": "Link",
+      "fileRef": "File Ref",
+      "icon": "Icon",
+      "displayOrder": "Display Order",
+      "status": "Status"
+    }
+  }
+}

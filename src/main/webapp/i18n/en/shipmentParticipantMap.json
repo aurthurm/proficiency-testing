@@ -1,0 +1,54 @@
+{
+  "proficiencyTestingApp": {
+    "shipmentParticipantMap": {
+      "home": {
+        "title": "Shipment Participant Maps",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Shipment Participant Map",
+        "createOrEditLabel": "Create or edit a Shipment Participant Map",
+        "notFound": "No Shipment Participant Maps found"
+      },
+      "created": "A new Shipment Participant Map is created with identifier {{ param }}",
+      "updated": "A Shipment Participant Map is updated with identifier {{ param }}",
+      "deleted": "A Shipment Participant Map is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Shipment Participant Map {{ id }}?"
+      },
+      "detail": {
+        "title": "Shipment Participant Map"
+      },
+      "id": "ID",
+      "responseStatus": "Response Status",
+      "shipmentReceiptDate": "Shipment Receipt Date",
+      "shipmentTestDate": "Shipment Test Date",
+      "shipmentTestReportDate": "Shipment Test Report Date",
+      "submittedAt": "Submitted At",
+      "evaluatedAt": "Evaluated At",
+      "isExcluded": "Is Excluded",
+      "isResponseLate": "Is Response Late",
+      "isPtTestNotPerformed": "Is Pt Test Not Performed",
+      "ptTestNotPerformedComments": "Pt Test Not Performed Comments",
+      "supervisorApproved": "Supervisor Approved",
+      "participantSupervisor": "Participant Supervisor",
+      "userComment": "User Comment",
+      "shipmentScore": "Shipment Score",
+      "documentationScore": "Documentation Score",
+      "finalResult": "Final Result",
+      "failureReason": "Failure Reason",
+      "evaluationComment": "Evaluation Comment",
+      "isFollowup": "Is Followup",
+      "manualOverride": "Manual Override",
+      "qcStatus": "Qc Status",
+      "qcDate": "Qc Date",
+      "qcDoneBy": "Qc Done By",
+      "syncedToMobile": "Synced To Mobile",
+      "syncedOn": "Synced On",
+      "results": "Results",
+      "capaRecords": "Capa Records",
+      "modeOfReceipt": "Mode Of Receipt",
+      "notTestedReason": "Not Tested Reason",
+      "shipment": "Shipment",
+      "participant": "Participant"
+    }
+  }
+}

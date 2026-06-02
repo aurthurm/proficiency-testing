@@ -1,0 +1,30 @@
+{
+  "proficiencyTestingApp": {
+    "contactMessage": {
+      "home": {
+        "title": "Contact Messages",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Contact Message",
+        "createOrEditLabel": "Create or edit a Contact Message",
+        "notFound": "No Contact Messages found"
+      },
+      "created": "A new Contact Message is created with identifier {{ param }}",
+      "updated": "A Contact Message is updated with identifier {{ param }}",
+      "deleted": "A Contact Message is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Contact Message {{ id }}?"
+      },
+      "detail": {
+        "title": "Contact Message"
+      },
+      "id": "ID",
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "ipAddress": "Ip Address",
+      "submittedAt": "Submitted At",
+      "isHandled": "Is Handled"
+    }
+  }
+}

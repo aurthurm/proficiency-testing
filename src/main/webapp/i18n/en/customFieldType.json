@@ -1,0 +1,12 @@
+{
+  "proficiencyTestingApp": {
+    "CustomFieldType": {
+      "null": "",
+      "TEXT": "TEXT",
+      "NUMBER": "NUMBER",
+      "DATE": "DATE",
+      "BOOLEAN": "BOOLEAN",
+      "SELECT": "SELECT"
+    }
+  }
+}

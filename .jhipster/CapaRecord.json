@@ -1,0 +1,52 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205818"
+  },
+  "applications": ["*"],
+  "documentation": "A logged corrective/preventive action against a participant's shipment.",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "rootCause",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "actionTaken",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "actionDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Status",
+      "fieldValues": "ACTIVE,INACTIVE,PENDING"
+    },
+    {
+      "fieldName": "followUpDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "CapaRecord",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "correctiveAction",
+      "relationshipName": "correctiveAction",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "shipmentParticipantMap",
+      "otherEntityRelationshipName": "capaRecords",
+      "relationshipName": "shipmentParticipantMap",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

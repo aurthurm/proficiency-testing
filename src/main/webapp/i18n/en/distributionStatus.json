@@ -1,0 +1,11 @@
+{
+  "proficiencyTestingApp": {
+    "DistributionStatus": {
+      "null": "",
+      "DRAFT": "DRAFT",
+      "OPEN": "OPEN",
+      "SHIPPED": "SHIPPED",
+      "CLOSED": "CLOSED"
+    }
+  }
+}

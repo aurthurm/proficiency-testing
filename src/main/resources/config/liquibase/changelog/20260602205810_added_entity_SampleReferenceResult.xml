@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the entity SampleReferenceResult.
+    -->
+    <changeSet id="20260602205810-1" author="jhipster">
+        <createTable tableName="sample_reference_result" remarks="Expected result for a sample. One row per (sample, assay/algorithm).">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="qualitative_result" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="quantitative_value" type="double">
+                <constraints nullable="true" />
+            </column>
+            <column name="unit" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="lower_limit" type="double">
+                <constraints nullable="true" />
+            </column>
+            <column name="upper_limit" type="double">
+                <constraints nullable="true" />
+            </column>
+            <column name="is_control_expected" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="assay_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="sample_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="20260602205810-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="../fake-data/sample_reference_result.csv"
+                  relativeToChangelogFile="true"
+                  separator=";"
+                  tableName="sample_reference_result"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="qualitative_result" type="string"/>
+            <column name="quantitative_value" type="numeric"/>
+            <column name="unit" type="string"/>
+            <column name="lower_limit" type="numeric"/>
+            <column name="upper_limit" type="numeric"/>
+            <column name="is_control_expected" type="boolean"/>
+            <column name="sample_id" type="numeric"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

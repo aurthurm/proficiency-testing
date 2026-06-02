@@ -1,0 +1,51 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205835"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "action",
+      "fieldType": "AuditAction",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "LOGIN,LOGOUT,CREATE,UPDATE,DELETE,DOWNLOAD,EVALUATE,FINALIZE,EXPORT,IMPERSONATE"
+    },
+    {
+      "fieldName": "statement",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "performedBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "performedByRole",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "performedOn",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "ipAddress",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "userAgent",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "sessionHash",
+      "fieldType": "String"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "AuditLog",
+  "pagination": "pagination",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

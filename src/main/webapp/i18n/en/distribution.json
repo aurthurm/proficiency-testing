@@ -1,0 +1,27 @@
+{
+  "proficiencyTestingApp": {
+    "distribution": {
+      "home": {
+        "title": "Distributions",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Distribution",
+        "createOrEditLabel": "Create or edit a Distribution",
+        "notFound": "No Distributions found"
+      },
+      "created": "A new Distribution is created with identifier {{ param }}",
+      "updated": "A Distribution is updated with identifier {{ param }}",
+      "deleted": "A Distribution is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Distribution {{ id }}?"
+      },
+      "detail": {
+        "title": "Distribution"
+      },
+      "id": "ID",
+      "code": "Code",
+      "distributionDate": "Distribution Date",
+      "status": "Status",
+      "shipments": "Shipments"
+    }
+  }
+}

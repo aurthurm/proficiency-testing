@@ -1,0 +1,10 @@
+{
+  "proficiencyTestingApp": {
+    "ContentStatus": {
+      "null": "",
+      "PUBLISHED": "PUBLISHED",
+      "DRAFT": "DRAFT",
+      "ARCHIVED": "ARCHIVED"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205827"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "section",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "text",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "link",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fileRef",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "icon",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "displayOrder",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "ContentStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PUBLISHED,DRAFT,ARCHIVED"
+    }
+  ],
+  "name": "HomePageSection",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

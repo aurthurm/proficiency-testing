@@ -1,0 +1,26 @@
+{
+  "proficiencyTestingApp": {
+    "participantCustomValue": {
+      "home": {
+        "title": "Participant Custom Values",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Participant Custom Value",
+        "createOrEditLabel": "Create or edit a Participant Custom Value",
+        "notFound": "No Participant Custom Values found"
+      },
+      "created": "A new Participant Custom Value is created with identifier {{ param }}",
+      "updated": "A Participant Custom Value is updated with identifier {{ param }}",
+      "deleted": "A Participant Custom Value is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Participant Custom Value {{ id }}?"
+      },
+      "detail": {
+        "title": "Participant Custom Value"
+      },
+      "id": "ID",
+      "value": "Value",
+      "participant": "Participant",
+      "definition": "Definition"
+    }
+  }
+}

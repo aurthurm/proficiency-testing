@@ -1,0 +1,11 @@
+id;title;body;status;published_from;published_to
+1;jumbo;../fake-data/blob/hipster.txt;ARCHIVED;2026-06-02T14:23:47;2026-06-02T05:42:24
+2;unwritten rusty;../fake-data/blob/hipster.txt;DRAFT;2026-06-01T22:00:25;2026-06-02T09:58:35
+3;safely awesome vibration;../fake-data/blob/hipster.txt;DRAFT;2026-06-02T03:10:38;2026-06-02T11:20:21
+4;beautifully happily;../fake-data/blob/hipster.txt;ARCHIVED;2026-06-02T12:51:24;2026-06-02T19:00:45
+5;actually;../fake-data/blob/hipster.txt;PUBLISHED;2026-06-02T16:35:40;2026-06-02T12:11:50
+6;roasted frenetically;../fake-data/blob/hipster.txt;PUBLISHED;2026-06-02T09:56:00;2026-06-01T23:48:22
+7;honesty;../fake-data/blob/hipster.txt;DRAFT;2026-06-02T07:43:59;2026-06-01T22:30:04
+8;in huzzah;../fake-data/blob/hipster.txt;ARCHIVED;2026-06-02T07:25:31;2026-06-02T20:40:33
+9;aside;../fake-data/blob/hipster.txt;PUBLISHED;2026-06-02T19:54:18;2026-06-02T18:24:59
+10;properly dazzling;../fake-data/blob/hipster.txt;PUBLISHED;2026-06-02T02:49:49;2026-06-02T20:13:47

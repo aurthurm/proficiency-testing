@@ -1,0 +1,14 @@
+{
+  "proficiencyTestingApp": {
+    "CertificateBatchStatus": {
+      "null": "",
+      "PENDING": "PENDING",
+      "GENERATING": "GENERATING",
+      "GENERATED": "GENERATED",
+      "APPROVED": "APPROVED",
+      "DISTRIBUTING": "DISTRIBUTING",
+      "DISTRIBUTED": "DISTRIBUTED",
+      "FAILED": "FAILED"
+    }
+  }
+}

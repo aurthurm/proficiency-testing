@@ -1,0 +1,33 @@
+{
+  "proficiencyTestingApp": {
+    "scheduledJob": {
+      "home": {
+        "title": "Scheduled Jobs",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Scheduled Job",
+        "createOrEditLabel": "Create or edit a Scheduled Job",
+        "notFound": "No Scheduled Jobs found"
+      },
+      "created": "A new Scheduled Job is created with identifier {{ param }}",
+      "updated": "A Scheduled Job is updated with identifier {{ param }}",
+      "deleted": "A Scheduled Job is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Scheduled Job {{ id }}?"
+      },
+      "detail": {
+        "title": "Scheduled Job"
+      },
+      "id": "ID",
+      "jobType": "Job Type",
+      "status": "Status",
+      "requestedBy": "Requested By",
+      "requestedOn": "Requested On",
+      "startedAt": "Started At",
+      "lastHeartbeat": "Last Heartbeat",
+      "completedAt": "Completed At",
+      "progressCompleted": "Progress Completed",
+      "progressTotal": "Progress Total",
+      "summary": "Summary"
+    }
+  }
+}

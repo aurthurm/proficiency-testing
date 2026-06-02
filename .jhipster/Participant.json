@@ -1,0 +1,176 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205802"
+  },
+  "applications": ["*"],
+  "documentation": "Testing site / laboratory.",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "uniqueIdentifier",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "instituteName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "departmentName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "pattern"],
+      "fieldValidateRulesPattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+    },
+    {
+      "fieldName": "additionalEmail",
+      "fieldType": "String",
+      "fieldValidateRules": ["pattern"],
+      "fieldValidateRulesPattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+    },
+    {
+      "fieldName": "address",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "shippingAddress",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "city",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "state",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "district",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "zip",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "region",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "phone",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "mobile",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "affiliation",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "networkTier",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "siteType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fundingSource",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "testingVolume",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "pepfarId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "latitude",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "longitude",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "labDirectorName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "labDirectorEmail",
+      "fieldType": "String",
+      "fieldValidateRules": ["pattern"],
+      "fieldValidateRulesPattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+    },
+    {
+      "fieldName": "contactPersonName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "contactPersonEmail",
+      "fieldType": "String",
+      "fieldValidateRules": ["pattern"],
+      "fieldValidateRulesPattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+    },
+    {
+      "fieldName": "contactPersonPhone",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Status",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ACTIVE,INACTIVE,PENDING"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Participant",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "shipmentParticipantMap",
+      "otherEntityRelationshipName": "participant",
+      "relationshipName": "shipmentMaps",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "country",
+      "relationshipName": "country",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "enrollment",
+      "otherEntityRelationshipName": "participant",
+      "relationshipName": "enrollments",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "participantCustomValue",
+      "otherEntityRelationshipName": "participant",
+      "relationshipName": "customValues",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "dataManager",
+      "otherEntityRelationshipName": "participants",
+      "relationshipName": "dataManagers",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

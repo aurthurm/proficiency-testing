@@ -1,0 +1,93 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205805"
+  },
+  "applications": ["*"],
+  "documentation": "A PT test discipline (DTS, VL, EID, ...).",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "schemeType",
+      "fieldType": "SchemeType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "DTS,VL,EID,COVID19,TB,RECENCY,GENERIC"
+    },
+    {
+      "fieldName": "modality",
+      "fieldType": "ResultModality",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "QUALITATIVE,QUANTITATIVE,SEMI_QUANTITATIVE"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Status",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ACTIVE,INACTIVE,PENDING"
+    }
+  ],
+  "name": "Scheme",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "certificateTemplate",
+      "otherEntityRelationshipName": "scheme",
+      "relationshipName": "certificateTemplate",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "schemeConfiguration",
+      "otherEntityRelationshipName": "scheme",
+      "relationshipName": "configurations",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "correctiveAction",
+      "otherEntityRelationshipName": "scheme",
+      "relationshipName": "correctiveActions",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "assay",
+      "otherEntityRelationshipName": "scheme",
+      "relationshipName": "assays",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "testKit",
+      "otherEntityRelationshipName": "scheme",
+      "relationshipName": "testKits",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "shipment",
+      "otherEntityRelationshipName": "scheme",
+      "relationshipName": "shipments",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "enrollment",
+      "otherEntityRelationshipName": "scheme",
+      "relationshipName": "enrollments",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

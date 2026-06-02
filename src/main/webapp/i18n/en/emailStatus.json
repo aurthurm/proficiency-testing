@@ -1,0 +1,11 @@
+{
+  "proficiencyTestingApp": {
+    "EmailStatus": {
+      "null": "",
+      "PENDING": "PENDING",
+      "SENT": "SENT",
+      "FAILED": "FAILED",
+      "RETRYING": "RETRYING"
+    }
+  }
+}

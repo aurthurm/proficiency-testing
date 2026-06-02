@@ -1,0 +1,44 @@
+{
+  "proficiencyTestingApp": {
+    "shipment": {
+      "home": {
+        "title": "Shipments",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Shipment",
+        "createOrEditLabel": "Create or edit a Shipment",
+        "notFound": "No Shipments found"
+      },
+      "created": "A new Shipment is created with identifier {{ param }}",
+      "updated": "A Shipment is updated with identifier {{ param }}",
+      "deleted": "A Shipment is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Shipment {{ id }}?"
+      },
+      "detail": {
+        "title": "Shipment"
+      },
+      "id": "ID",
+      "code": "Code",
+      "shipmentDate": "Shipment Date",
+      "responseDeadline": "Response Deadline",
+      "responsesOpen": "Responses Open",
+      "autoCloseAtDeadline": "Auto Close At Deadline",
+      "allowEditingResponse": "Allow Editing Response",
+      "issuingAuthority": "Issuing Authority",
+      "coordinatorName": "Coordinator Name",
+      "coordinatorEmail": "Coordinator Email",
+      "coordinatorPhone": "Coordinator Phone",
+      "numberOfSamples": "Number Of Samples",
+      "maxScore": "Max Score",
+      "status": "Status",
+      "attributes": "Attributes",
+      "reportsGeneratedAt": "Reports Generated At",
+      "finalizedAt": "Finalized At",
+      "samples": "Samples",
+      "participantMaps": "Participant Maps",
+      "distribution": "Distribution",
+      "scheme": "Scheme",
+      "certificateBatches": "Certificate Batches"
+    }
+  }
+}

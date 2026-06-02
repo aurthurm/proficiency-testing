@@ -1,0 +1,58 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205806"
+  },
+  "applications": ["*"],
+  "documentation": "Versioned scoring/configuration for a scheme (ADM-14).",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "version",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "effectiveDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "passingScore",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "documentationWeight",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "allowLateResponse",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "optionalFields",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "scoringRules",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean"
+    }
+  ],
+  "name": "SchemeConfiguration",
+  "relationships": [
+    {
+      "otherEntityName": "scheme",
+      "otherEntityRelationshipName": "configurations",
+      "relationshipName": "scheme",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

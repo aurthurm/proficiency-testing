@@ -1,0 +1,37 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205814"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "manufacturer",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Status",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ACTIVE,INACTIVE,PENDING"
+    }
+  ],
+  "name": "TestKit",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "scheme",
+      "otherEntityRelationshipName": "testKits",
+      "relationshipName": "scheme",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

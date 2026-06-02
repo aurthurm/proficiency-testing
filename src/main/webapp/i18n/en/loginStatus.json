@@ -1,0 +1,10 @@
+{
+  "proficiencyTestingApp": {
+    "LoginStatus": {
+      "null": "",
+      "SUCCESS": "SUCCESS",
+      "FAILED": "FAILED",
+      "BANNED": "BANNED"
+    }
+  }
+}

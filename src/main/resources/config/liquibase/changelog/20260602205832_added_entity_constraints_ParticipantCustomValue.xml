@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity ParticipantCustomValue.
+    -->
+    <changeSet id="20260602205832-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="participant_id"
+                                 baseTableName="participant_custom_value"
+                                 constraintName="fk_participant_custom_value__participant_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="participant"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="definition_id"
+                                 baseTableName="participant_custom_value"
+                                 constraintName="fk_participant_custom_value__definition_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="custom_field_definition"
+                                 />
+    </changeSet>
+</databaseChangeLog>

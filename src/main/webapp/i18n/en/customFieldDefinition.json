@@ -1,0 +1,29 @@
+{
+  "proficiencyTestingApp": {
+    "customFieldDefinition": {
+      "home": {
+        "title": "Custom Field Definitions",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Custom Field Definition",
+        "createOrEditLabel": "Create or edit a Custom Field Definition",
+        "notFound": "No Custom Field Definitions found"
+      },
+      "created": "A new Custom Field Definition is created with identifier {{ param }}",
+      "updated": "A Custom Field Definition is updated with identifier {{ param }}",
+      "deleted": "A Custom Field Definition is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Custom Field Definition {{ id }}?"
+      },
+      "detail": {
+        "title": "Custom Field Definition"
+      },
+      "id": "ID",
+      "fieldKey": "Field Key",
+      "label": "Label",
+      "fieldType": "Field Type",
+      "options": "Options",
+      "displayOrder": "Display Order",
+      "status": "Status"
+    }
+  }
+}

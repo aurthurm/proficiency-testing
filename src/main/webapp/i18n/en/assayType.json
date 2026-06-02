@@ -1,0 +1,13 @@
+{
+  "proficiencyTestingApp": {
+    "AssayType": {
+      "null": "",
+      "DTS_ALGORITHM": "DTS_ALGORITHM",
+      "VL_ASSAY": "VL_ASSAY",
+      "EID_DETECTION_ASSAY": "EID_DETECTION_ASSAY",
+      "EID_EXTRACTION_ASSAY": "EID_EXTRACTION_ASSAY",
+      "TB_ASSAY": "TB_ASSAY",
+      "COVID19_GENE": "COVID19_GENE"
+    }
+  }
+}

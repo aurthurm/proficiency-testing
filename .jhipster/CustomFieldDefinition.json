@@ -1,0 +1,43 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205831"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "fieldKey",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "label",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fieldType",
+      "fieldType": "CustomFieldType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "TEXT,NUMBER,DATE,BOOLEAN,SELECT"
+    },
+    {
+      "fieldName": "options",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "displayOrder",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Status",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ACTIVE,INACTIVE,PENDING"
+    }
+  ],
+  "name": "CustomFieldDefinition",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

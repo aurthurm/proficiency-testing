@@ -1,0 +1,36 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205828"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "link",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "logoRef",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "sortOrder",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "ContentStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PUBLISHED,DRAFT,ARCHIVED"
+    }
+  ],
+  "name": "Partner",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

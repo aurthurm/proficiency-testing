@@ -1,0 +1,28 @@
+{
+  "proficiencyTestingApp": {
+    "assay": {
+      "home": {
+        "title": "Assays",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Assay",
+        "createOrEditLabel": "Create or edit a Assay",
+        "notFound": "No Assays found"
+      },
+      "created": "A new Assay is created with identifier {{ param }}",
+      "updated": "A Assay is updated with identifier {{ param }}",
+      "deleted": "A Assay is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Assay {{ id }}?"
+      },
+      "detail": {
+        "title": "Assay"
+      },
+      "id": "ID",
+      "name": "Name",
+      "assayType": "Assay Type",
+      "manufacturer": "Manufacturer",
+      "status": "Status",
+      "scheme": "Scheme"
+    }
+  }
+}

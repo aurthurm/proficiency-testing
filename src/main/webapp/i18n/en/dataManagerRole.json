@@ -1,0 +1,9 @@
+{
+  "proficiencyTestingApp": {
+    "DataManagerRole": {
+      "null": "",
+      "MANAGER": "MANAGER",
+      "PTCC": "PTCC"
+    }
+  }
+}

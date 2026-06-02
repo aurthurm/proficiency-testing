@@ -1,0 +1,26 @@
+{
+  "proficiencyTestingApp": {
+    "globalConfiguration": {
+      "home": {
+        "title": "Global Configurations",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Global Configuration",
+        "createOrEditLabel": "Create or edit a Global Configuration",
+        "notFound": "No Global Configurations found"
+      },
+      "created": "A new Global Configuration is created with identifier {{ param }}",
+      "updated": "A Global Configuration is updated with identifier {{ param }}",
+      "deleted": "A Global Configuration is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Global Configuration {{ id }}?"
+      },
+      "detail": {
+        "title": "Global Configuration"
+      },
+      "id": "ID",
+      "configKey": "Config Key",
+      "configValue": "Config Value",
+      "description": "Description"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "proficiencyTestingApp": {
+    "certificateTemplate": {
+      "home": {
+        "title": "Certificate Templates",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Certificate Template",
+        "createOrEditLabel": "Create or edit a Certificate Template",
+        "notFound": "No Certificate Templates found"
+      },
+      "created": "A new Certificate Template is created with identifier {{ param }}",
+      "updated": "A Certificate Template is updated with identifier {{ param }}",
+      "deleted": "A Certificate Template is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Certificate Template {{ id }}?"
+      },
+      "detail": {
+        "title": "Certificate Template"
+      },
+      "id": "ID",
+      "certificateType": "Certificate Type",
+      "fileRef": "File Ref",
+      "detectedFields": "Detected Fields",
+      "scheme": "Scheme"
+    }
+  }
+}

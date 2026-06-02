@@ -1,0 +1,77 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205811"
+  },
+  "applications": ["*"],
+  "documentation": "Participant's reported result for a sample.",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "reportedQualitativeResult",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "reportedQuantitativeValue",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "unit",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lotNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "expiryDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "zScore",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "calculatedScore",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "comments",
+      "fieldType": "String"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "ParticipantResult",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "assay",
+      "relationshipName": "assay",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "testKit",
+      "relationshipName": "testKit",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "shipmentSample",
+      "otherEntityRelationshipName": "participantResults",
+      "relationshipName": "sample",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "shipmentParticipantMap",
+      "otherEntityRelationshipName": "results",
+      "relationshipName": "shipmentParticipantMap",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

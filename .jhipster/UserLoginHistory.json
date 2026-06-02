@@ -1,0 +1,50 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205836"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "loginId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "loginContext",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "loginStatus",
+      "fieldType": "LoginStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "SUCCESS,FAILED,BANNED"
+    },
+    {
+      "fieldName": "attemptedAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "ipAddress",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "browser",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "operatingSystem",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "sessionHash",
+      "fieldType": "String"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "UserLoginHistory",
+  "pagination": "pagination",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

@@ -1,0 +1,36 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205829"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "questionText",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "displayOrder",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "ContentStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PUBLISHED,DRAFT,ARCHIVED"
+    }
+  ],
+  "name": "FeedbackQuestion",
+  "relationships": [
+    {
+      "otherEntityName": "participantFeedback",
+      "otherEntityRelationshipName": "question",
+      "relationshipName": "answers",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

@@ -1,0 +1,162 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205812"
+  },
+  "applications": ["*"],
+  "documentation": "Participant's instance of a shipment + evaluation summary.",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "responseStatus",
+      "fieldType": "ResponseStatus",
+      "fieldValues": "NOT_STARTED,IN_PROGRESS,SUBMITTED,LATE,NOT_TESTED,NO_RESPONSE"
+    },
+    {
+      "fieldName": "shipmentReceiptDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "shipmentTestDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "shipmentTestReportDate",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "submittedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "evaluatedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "isExcluded",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "isResponseLate",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "isPtTestNotPerformed",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "ptTestNotPerformedComments",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "supervisorApproved",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "participantSupervisor",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "userComment",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "shipmentScore",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "documentationScore",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "finalResult",
+      "fieldType": "FinalResult",
+      "fieldValues": "PASS,FAIL,EXCLUDED,NOT_EVALUATED"
+    },
+    {
+      "fieldName": "failureReason",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "evaluationComment",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "isFollowup",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "manualOverride",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "qcStatus",
+      "fieldType": "QcStatus",
+      "fieldValues": "PENDING,PASSED,FAILED"
+    },
+    {
+      "fieldName": "qcDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "qcDoneBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "syncedToMobile",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "syncedOn",
+      "fieldType": "Instant"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "ShipmentParticipantMap",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "participantResult",
+      "otherEntityRelationshipName": "shipmentParticipantMap",
+      "relationshipName": "results",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "capaRecord",
+      "otherEntityRelationshipName": "shipmentParticipantMap",
+      "relationshipName": "capaRecords",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "modeOfReceipt",
+      "relationshipName": "modeOfReceipt",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "notTestedReason",
+      "relationshipName": "notTestedReason",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "shipment",
+      "otherEntityRelationshipName": "participantMaps",
+      "relationshipName": "shipment",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "participant",
+      "otherEntityRelationshipName": "shipmentMaps",
+      "relationshipName": "participant",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

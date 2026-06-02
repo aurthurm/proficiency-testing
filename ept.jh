@@ -16,26 +16,6 @@
 //     kept only where they carry domain meaning
 // ============================================================================
 
-application {
-  config {
-    baseName ept
-    packageName com.ept
-    applicationType monolith
-    authenticationType jwt
-    databaseType sql
-    prodDatabaseType mysql
-    devDatabaseType h2Disk
-    cacheProvider no
-    enableHibernateCache false
-    buildTool maven
-    clientFramework react
-    testFrameworks [cypress]
-    jhiPrefix jhi
-    nativeLanguage en
-    languages [en]
-  }
-}
-
 // ----------------------------------------------------------------------------
 // ENUMS
 // ----------------------------------------------------------------------------

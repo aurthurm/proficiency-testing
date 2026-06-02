@@ -1,0 +1,10 @@
+{
+  "proficiencyTestingApp": {
+    "Status": {
+      "null": "",
+      "ACTIVE": "ACTIVE",
+      "INACTIVE": "INACTIVE",
+      "PENDING": "PENDING"
+    }
+  }
+}

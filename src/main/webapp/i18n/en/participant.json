@@ -1,0 +1,56 @@
+{
+  "proficiencyTestingApp": {
+    "participant": {
+      "home": {
+        "title": "Participants",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Participant",
+        "createOrEditLabel": "Create or edit a Participant",
+        "notFound": "No Participants found"
+      },
+      "created": "A new Participant is created with identifier {{ param }}",
+      "updated": "A Participant is updated with identifier {{ param }}",
+      "deleted": "A Participant is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Participant {{ id }}?"
+      },
+      "detail": {
+        "title": "Participant"
+      },
+      "id": "ID",
+      "uniqueIdentifier": "Unique Identifier",
+      "instituteName": "Institute Name",
+      "departmentName": "Department Name",
+      "email": "Email",
+      "additionalEmail": "Additional Email",
+      "address": "Address",
+      "shippingAddress": "Shipping Address",
+      "city": "City",
+      "state": "State",
+      "district": "District",
+      "zip": "Zip",
+      "region": "Region",
+      "phone": "Phone",
+      "mobile": "Mobile",
+      "affiliation": "Affiliation",
+      "networkTier": "Network Tier",
+      "siteType": "Site Type",
+      "fundingSource": "Funding Source",
+      "testingVolume": "Testing Volume",
+      "pepfarId": "Pepfar Id",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "labDirectorName": "Lab Director Name",
+      "labDirectorEmail": "Lab Director Email",
+      "contactPersonName": "Contact Person Name",
+      "contactPersonEmail": "Contact Person Email",
+      "contactPersonPhone": "Contact Person Phone",
+      "status": "Status",
+      "shipmentMaps": "Shipment Maps",
+      "country": "Country",
+      "enrollments": "Enrollments",
+      "customValues": "Custom Values",
+      "dataManagers": "Data Managers"
+    }
+  }
+}

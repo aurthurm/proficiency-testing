@@ -1,0 +1,124 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205808"
+  },
+  "applications": ["*"],
+  "documentation": "PT panel sent to participants.",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "shipmentDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "responseDeadline",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "responsesOpen",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "autoCloseAtDeadline",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "allowEditingResponse",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "issuingAuthority",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "coordinatorName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "coordinatorEmail",
+      "fieldType": "String",
+      "fieldValidateRules": ["pattern"],
+      "fieldValidateRulesPattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+    },
+    {
+      "fieldName": "coordinatorPhone",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "numberOfSamples",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "maxScore",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "ShipmentStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "DRAFT,CONFIGURED,READY,QUEUED,SHIPPED,RESPONSES_OPEN,RESPONSES_CLOSED,EVALUATING,EVALUATED,REPORTS_GENERATED,FINALIZED"
+    },
+    {
+      "fieldName": "attributes",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "reportsGeneratedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "finalizedAt",
+      "fieldType": "Instant"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Shipment",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "shipmentSample",
+      "otherEntityRelationshipName": "shipment",
+      "relationshipName": "samples",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "shipmentParticipantMap",
+      "otherEntityRelationshipName": "shipment",
+      "relationshipName": "participantMaps",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "distribution",
+      "otherEntityRelationshipName": "shipments",
+      "relationshipName": "distribution",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "scheme",
+      "otherEntityRelationshipName": "shipments",
+      "relationshipName": "scheme",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "certificateBatch",
+      "otherEntityRelationshipName": "shipments",
+      "relationshipName": "certificateBatches",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

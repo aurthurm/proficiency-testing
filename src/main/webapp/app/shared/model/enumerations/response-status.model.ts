@@ -1,0 +1,13 @@
+export enum ResponseStatus {
+  NOT_STARTED = 'NOT_STARTED',
+
+  IN_PROGRESS = 'IN_PROGRESS',
+
+  SUBMITTED = 'SUBMITTED',
+
+  LATE = 'LATE',
+
+  NOT_TESTED = 'NOT_TESTED',
+
+  NO_RESPONSE = 'NO_RESPONSE',
+}

@@ -1,0 +1,48 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205804"
+  },
+  "applications": ["*"],
+  "documentation": "Participant enrolled into a scheme/programme (programme-level membership).",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "status",
+      "fieldType": "EnrollmentStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ENROLLED,SUSPENDED,WITHDRAWN"
+    },
+    {
+      "fieldName": "enrolledOn",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "withdrawnOn",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Enrollment",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "participant",
+      "otherEntityRelationshipName": "enrollments",
+      "relationshipName": "participant",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "scheme",
+      "otherEntityRelationshipName": "enrollments",
+      "relationshipName": "scheme",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

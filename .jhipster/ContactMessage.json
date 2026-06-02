@@ -1,0 +1,47 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205826"
+  },
+  "applications": ["*"],
+  "documentation": "Public contact-us submissions (PUB-02).",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "pattern"],
+      "fieldValidateRulesPattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+    },
+    {
+      "fieldName": "subject",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "message",
+      "fieldType": "TextBlob",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "ipAddress",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "submittedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "isHandled",
+      "fieldType": "Boolean"
+    }
+  ],
+  "name": "ContactMessage",
+  "pagination": "pagination",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

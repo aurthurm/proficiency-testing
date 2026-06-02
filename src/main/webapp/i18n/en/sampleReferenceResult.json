@@ -1,0 +1,31 @@
+{
+  "proficiencyTestingApp": {
+    "sampleReferenceResult": {
+      "home": {
+        "title": "Sample Reference Results",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Sample Reference Result",
+        "createOrEditLabel": "Create or edit a Sample Reference Result",
+        "notFound": "No Sample Reference Results found"
+      },
+      "created": "A new Sample Reference Result is created with identifier {{ param }}",
+      "updated": "A Sample Reference Result is updated with identifier {{ param }}",
+      "deleted": "A Sample Reference Result is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Sample Reference Result {{ id }}?"
+      },
+      "detail": {
+        "title": "Sample Reference Result"
+      },
+      "id": "ID",
+      "qualitativeResult": "Qualitative Result",
+      "quantitativeValue": "Quantitative Value",
+      "unit": "Unit",
+      "lowerLimit": "Lower Limit",
+      "upperLimit": "Upper Limit",
+      "isControlExpected": "Is Control Expected",
+      "assay": "Assay",
+      "sample": "Sample"
+    }
+  }
+}

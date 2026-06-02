@@ -1,0 +1,48 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205837"
+  },
+  "applications": ["*"],
+  "documentation": "Mobile-app API request log (API-06).",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "transactionId",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "requestedBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "requestedOn",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "numberOfRecords",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "requestType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "testType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "apiUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dataFormat",
+      "fieldType": "String"
+    }
+  ],
+  "name": "ApiRequestLog",
+  "pagination": "pagination",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

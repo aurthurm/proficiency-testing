@@ -1,0 +1,10 @@
+{
+  "proficiencyTestingApp": {
+    "QcStatus": {
+      "null": "",
+      "PENDING": "PENDING",
+      "PASSED": "PASSED",
+      "FAILED": "FAILED"
+    }
+  }
+}

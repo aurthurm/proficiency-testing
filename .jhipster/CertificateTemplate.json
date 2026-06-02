@@ -1,0 +1,35 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205819"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "certificateType",
+      "fieldType": "CertificateType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PARTICIPATION,EXCELLENCE"
+    },
+    {
+      "fieldName": "fileRef",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "detectedFields",
+      "fieldType": "TextBlob"
+    }
+  ],
+  "name": "CertificateTemplate",
+  "relationships": [
+    {
+      "otherEntityName": "scheme",
+      "otherEntityRelationshipName": "certificateTemplate",
+      "relationshipName": "scheme",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

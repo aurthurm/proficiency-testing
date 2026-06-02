@@ -1,0 +1,61 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205820"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "CertificateBatchStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PENDING,GENERATING,GENERATED,APPROVED,DISTRIBUTING,DISTRIBUTED,FAILED"
+    },
+    {
+      "fieldName": "excellenceCount",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "participationCount",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "skippedCount",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "downloadUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "errorMessage",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "approvedBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "approvedOn",
+      "fieldType": "Instant"
+    }
+  ],
+  "name": "CertificateBatch",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "shipment",
+      "otherEntityRelationshipName": "certificateBatches",
+      "relationshipName": "shipments",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

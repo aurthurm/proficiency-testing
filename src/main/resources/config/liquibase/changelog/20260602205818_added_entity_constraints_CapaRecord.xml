@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity CapaRecord.
+    -->
+    <changeSet id="20260602205818-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="corrective_action_id"
+                                 baseTableName="capa_record"
+                                 constraintName="fk_capa_record__corrective_action_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="corrective_action"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="shipment_participant_map_id"
+                                 baseTableName="capa_record"
+                                 constraintName="fk_capa_record__shipment_participant_map_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="shipment_participant_map"
+                                 />
+    </changeSet>
+</databaseChangeLog>

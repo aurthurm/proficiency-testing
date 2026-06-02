@@ -1,0 +1,27 @@
+{
+  "proficiencyTestingApp": {
+    "feedbackQuestion": {
+      "home": {
+        "title": "Feedback Questions",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Feedback Question",
+        "createOrEditLabel": "Create or edit a Feedback Question",
+        "notFound": "No Feedback Questions found"
+      },
+      "created": "A new Feedback Question is created with identifier {{ param }}",
+      "updated": "A Feedback Question is updated with identifier {{ param }}",
+      "deleted": "A Feedback Question is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Feedback Question {{ id }}?"
+      },
+      "detail": {
+        "title": "Feedback Question"
+      },
+      "id": "ID",
+      "questionText": "Question Text",
+      "displayOrder": "Display Order",
+      "status": "Status",
+      "answers": "Answers"
+    }
+  }
+}

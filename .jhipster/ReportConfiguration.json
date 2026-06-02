@@ -1,0 +1,48 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205821"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "reportHeader",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "logo",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "logoRight",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "layout",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "format",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "topMargin",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "instituteAddressPosition",
+      "fieldType": "String"
+    }
+  ],
+  "name": "ReportConfiguration",
+  "relationships": [
+    {
+      "otherEntityName": "scheme",
+      "relationshipName": "scheme",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

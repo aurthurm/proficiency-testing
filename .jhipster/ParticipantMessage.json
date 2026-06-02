@@ -1,0 +1,38 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205825"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "subject",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "body",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "isRead",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "sentAt",
+      "fieldType": "Instant"
+    }
+  ],
+  "name": "ParticipantMessage",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "participant",
+      "relationshipName": "participant",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

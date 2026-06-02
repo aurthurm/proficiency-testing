@@ -1,0 +1,35 @@
+{
+  "proficiencyTestingApp": {
+    "scheme": {
+      "home": {
+        "title": "Schemes",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Scheme",
+        "createOrEditLabel": "Create or edit a Scheme",
+        "notFound": "No Schemes found"
+      },
+      "created": "A new Scheme is created with identifier {{ param }}",
+      "updated": "A Scheme is updated with identifier {{ param }}",
+      "deleted": "A Scheme is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Scheme {{ id }}?"
+      },
+      "detail": {
+        "title": "Scheme"
+      },
+      "id": "ID",
+      "code": "Code",
+      "name": "Name",
+      "schemeType": "Scheme Type",
+      "modality": "Modality",
+      "status": "Status",
+      "certificateTemplate": "Certificate Template",
+      "configurations": "Configurations",
+      "correctiveActions": "Corrective Actions",
+      "assays": "Assays",
+      "testKits": "Test Kits",
+      "shipments": "Shipments",
+      "enrollments": "Enrollments"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "proficiencyTestingApp": {
+    "EnrollmentStatus": {
+      "null": "",
+      "ENROLLED": "ENROLLED",
+      "SUSPENDED": "SUSPENDED",
+      "WITHDRAWN": "WITHDRAWN"
+    }
+  }
+}

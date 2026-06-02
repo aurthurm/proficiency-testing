@@ -1,0 +1,32 @@
+{
+  "proficiencyTestingApp": {
+    "schemeConfiguration": {
+      "home": {
+        "title": "Scheme Configurations",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Scheme Configuration",
+        "createOrEditLabel": "Create or edit a Scheme Configuration",
+        "notFound": "No Scheme Configurations found"
+      },
+      "created": "A new Scheme Configuration is created with identifier {{ param }}",
+      "updated": "A Scheme Configuration is updated with identifier {{ param }}",
+      "deleted": "A Scheme Configuration is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Scheme Configuration {{ id }}?"
+      },
+      "detail": {
+        "title": "Scheme Configuration"
+      },
+      "id": "ID",
+      "version": "Version",
+      "effectiveDate": "Effective Date",
+      "passingScore": "Passing Score",
+      "documentationWeight": "Documentation Weight",
+      "allowLateResponse": "Allow Late Response",
+      "optionalFields": "Optional Fields",
+      "scoringRules": "Scoring Rules",
+      "isActive": "Is Active",
+      "scheme": "Scheme"
+    }
+  }
+}

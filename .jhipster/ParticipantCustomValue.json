@@ -1,0 +1,33 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205832"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "value",
+      "fieldType": "String"
+    }
+  ],
+  "name": "ParticipantCustomValue",
+  "relationships": [
+    {
+      "otherEntityName": "participant",
+      "otherEntityRelationshipName": "customValues",
+      "relationshipName": "participant",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "customFieldDefinition",
+      "relationshipName": "definition",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

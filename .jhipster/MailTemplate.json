@@ -1,0 +1,31 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205822"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "subject",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "htmlBody",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "ContentStatus",
+      "fieldValues": "PUBLISHED,DRAFT,ARCHIVED"
+    }
+  ],
+  "name": "MailTemplate",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

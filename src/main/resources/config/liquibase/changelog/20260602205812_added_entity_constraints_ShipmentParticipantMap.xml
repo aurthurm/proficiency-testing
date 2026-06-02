@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity ShipmentParticipantMap.
+    -->
+    <changeSet id="20260602205812-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="mode_of_receipt_id"
+                                 baseTableName="shipment_participant_map"
+                                 constraintName="fk_shipment_participant_map__mode_of_receipt_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="mode_of_receipt"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="not_tested_reason_id"
+                                 baseTableName="shipment_participant_map"
+                                 constraintName="fk_shipment_participant_map__not_tested_reason_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="not_tested_reason"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="shipment_id"
+                                 baseTableName="shipment_participant_map"
+                                 constraintName="fk_shipment_participant_map__shipment_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="shipment"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="participant_id"
+                                 baseTableName="shipment_participant_map"
+                                 constraintName="fk_shipment_participant_map__participant_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="participant"
+                                 />
+    </changeSet>
+</databaseChangeLog>

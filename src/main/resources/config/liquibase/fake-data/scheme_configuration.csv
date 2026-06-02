@@ -1,0 +1,11 @@
+id;version;effective_date;passing_score;documentation_weight;allow_late_response;optional_fields;scoring_rules;is_active;scheme_id
+1;895;2026-06-02;7485.05;4276.73;false;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;1
+2;19689;2026-06-02;8707.13;18844.74;false;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;true;2
+3;6551;2026-06-02;31427.89;28679.32;false;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;true;3
+4;6945;2026-06-02;8543.61;10532.25;false;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;4
+5;15262;2026-06-02;24197.3;24514.94;true;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;true;5
+6;5280;2026-06-02;5551.47;2657.74;false;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;true;6
+7;1432;2026-06-02;11155.14;24458.65;false;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;7
+8;29125;2026-06-02;26869.44;19688.06;false;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;true;8
+9;15125;2026-06-02;22794.91;30801.31;false;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;9
+10;31630;2026-06-02;3227.85;1058.73;false;../fake-data/blob/hipster.txt;../fake-data/blob/hipster.txt;false;10

@@ -1,0 +1,32 @@
+{
+  "proficiencyTestingApp": {
+    "shipmentSample": {
+      "home": {
+        "title": "Shipment Samples",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Shipment Sample",
+        "createOrEditLabel": "Create or edit a Shipment Sample",
+        "notFound": "No Shipment Samples found"
+      },
+      "created": "A new Shipment Sample is created with identifier {{ param }}",
+      "updated": "A Shipment Sample is updated with identifier {{ param }}",
+      "deleted": "A Shipment Sample is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Shipment Sample {{ id }}?"
+      },
+      "detail": {
+        "title": "Shipment Sample"
+      },
+      "id": "ID",
+      "label": "Label",
+      "displayOrder": "Display Order",
+      "isControl": "Is Control",
+      "isMandatory": "Is Mandatory",
+      "sampleScore": "Sample Score",
+      "preparationDate": "Preparation Date",
+      "referenceResults": "Reference Results",
+      "participantResults": "Participant Results",
+      "shipment": "Shipment"
+    }
+  }
+}

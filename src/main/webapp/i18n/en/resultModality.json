@@ -1,0 +1,10 @@
+{
+  "proficiencyTestingApp": {
+    "ResultModality": {
+      "null": "",
+      "QUALITATIVE": "QUALITATIVE",
+      "QUANTITATIVE": "QUANTITATIVE",
+      "SEMI_QUANTITATIVE": "SEMI_QUANTITATIVE"
+    }
+  }
+}

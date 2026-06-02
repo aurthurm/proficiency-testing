@@ -1,0 +1,63 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205809"
+  },
+  "applications": ["*"],
+  "documentation": "A single sample/control within a shipment panel (shared structure).",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "label",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "displayOrder",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "isControl",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "isMandatory",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "sampleScore",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "preparationDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "name": "ShipmentSample",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "sampleReferenceResult",
+      "otherEntityRelationshipName": "sample",
+      "relationshipName": "referenceResults",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "participantResult",
+      "otherEntityRelationshipName": "sample",
+      "relationshipName": "participantResults",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "shipment",
+      "otherEntityRelationshipName": "samples",
+      "relationshipName": "shipment",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

@@ -1,0 +1,33 @@
+{
+  "proficiencyTestingApp": {
+    "certificateBatch": {
+      "home": {
+        "title": "Certificate Batches",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Certificate Batch",
+        "createOrEditLabel": "Create or edit a Certificate Batch",
+        "notFound": "No Certificate Batches found"
+      },
+      "created": "A new Certificate Batch is created with identifier {{ param }}",
+      "updated": "A Certificate Batch is updated with identifier {{ param }}",
+      "deleted": "A Certificate Batch is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Certificate Batch {{ id }}?"
+      },
+      "detail": {
+        "title": "Certificate Batch"
+      },
+      "id": "ID",
+      "name": "Name",
+      "status": "Status",
+      "excellenceCount": "Excellence Count",
+      "participationCount": "Participation Count",
+      "skippedCount": "Skipped Count",
+      "downloadUrl": "Download Url",
+      "errorMessage": "Error Message",
+      "approvedBy": "Approved By",
+      "approvedOn": "Approved On",
+      "shipments": "Shipments"
+    }
+  }
+}

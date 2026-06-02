@@ -1,0 +1,31 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205817"
+  },
+  "applications": ["*"],
+  "documentation": "Catalogue of predefined failure reasons + recommended corrective actions.",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "name": "CorrectiveAction",
+  "relationships": [
+    {
+      "otherEntityName": "scheme",
+      "otherEntityRelationshipName": "correctiveActions",
+      "relationshipName": "scheme",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

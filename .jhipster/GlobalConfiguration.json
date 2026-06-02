@@ -1,0 +1,27 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205833"
+  },
+  "applications": ["*"],
+  "documentation": "System-wide configuration (key/value).",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "configKey",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "configValue",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "name": "GlobalConfiguration",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

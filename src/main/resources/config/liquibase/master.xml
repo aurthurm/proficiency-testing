@@ -19,7 +19,64 @@
     <property name="timeType" value="time(6)" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205801_added_entity_DataManager.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205802_added_entity_Participant.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205803_added_entity_Country.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205804_added_entity_Enrollment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205805_added_entity_Scheme.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205806_added_entity_SchemeConfiguration.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205807_added_entity_Distribution.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205808_added_entity_Shipment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205809_added_entity_ShipmentSample.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205810_added_entity_SampleReferenceResult.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205811_added_entity_ParticipantResult.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205812_added_entity_ShipmentParticipantMap.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205813_added_entity_Assay.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205814_added_entity_TestKit.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205815_added_entity_ModeOfReceipt.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205816_added_entity_NotTestedReason.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205817_added_entity_CorrectiveAction.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205818_added_entity_CapaRecord.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205819_added_entity_CertificateTemplate.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205820_added_entity_CertificateBatch.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205821_added_entity_ReportConfiguration.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205822_added_entity_MailTemplate.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205823_added_entity_EmailMessage.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205824_added_entity_Announcement.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205825_added_entity_ParticipantMessage.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205826_added_entity_ContactMessage.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205827_added_entity_HomePageSection.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205828_added_entity_Partner.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205829_added_entity_FeedbackQuestion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205830_added_entity_ParticipantFeedback.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205831_added_entity_CustomFieldDefinition.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205832_added_entity_ParticipantCustomValue.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205833_added_entity_GlobalConfiguration.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205834_added_entity_ScheduledJob.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205835_added_entity_AuditLog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205836_added_entity_UserLoginHistory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205837_added_entity_ApiRequestLog.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20260602205801_added_entity_constraints_DataManager.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205802_added_entity_constraints_Participant.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205804_added_entity_constraints_Enrollment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205805_added_entity_constraints_Scheme.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205806_added_entity_constraints_SchemeConfiguration.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205808_added_entity_constraints_Shipment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205809_added_entity_constraints_ShipmentSample.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205810_added_entity_constraints_SampleReferenceResult.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205811_added_entity_constraints_ParticipantResult.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205812_added_entity_constraints_ShipmentParticipantMap.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205813_added_entity_constraints_Assay.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205814_added_entity_constraints_TestKit.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205817_added_entity_constraints_CorrectiveAction.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205818_added_entity_constraints_CapaRecord.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205820_added_entity_constraints_CertificateBatch.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205821_added_entity_constraints_ReportConfiguration.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205823_added_entity_constraints_EmailMessage.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205825_added_entity_constraints_ParticipantMessage.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205830_added_entity_constraints_ParticipantFeedback.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260602205832_added_entity_constraints_ParticipantCustomValue.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

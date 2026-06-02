@@ -1,0 +1,29 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205803"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "isoCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": "3",
+      "fieldValidateRulesMinlength": "2"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "region",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Country",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

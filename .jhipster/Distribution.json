@@ -1,0 +1,40 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205807"
+  },
+  "applications": ["*"],
+  "documentation": "PT survey grouping shipments.",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "distributionDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "DistributionStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "DRAFT,OPEN,SHIPPED,CLOSED"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Distribution",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "shipment",
+      "otherEntityRelationshipName": "distribution",
+      "relationshipName": "shipments",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

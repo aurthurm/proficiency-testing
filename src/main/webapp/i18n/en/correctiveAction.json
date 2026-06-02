@@ -1,0 +1,26 @@
+{
+  "proficiencyTestingApp": {
+    "correctiveAction": {
+      "home": {
+        "title": "Corrective Actions",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Corrective Action",
+        "createOrEditLabel": "Create or edit a Corrective Action",
+        "notFound": "No Corrective Actions found"
+      },
+      "created": "A new Corrective Action is created with identifier {{ param }}",
+      "updated": "A Corrective Action is updated with identifier {{ param }}",
+      "deleted": "A Corrective Action is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Corrective Action {{ id }}?"
+      },
+      "detail": {
+        "title": "Corrective Action"
+      },
+      "id": "ID",
+      "title": "Title",
+      "description": "Description",
+      "scheme": "Scheme"
+    }
+  }
+}

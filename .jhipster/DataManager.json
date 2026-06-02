@@ -1,0 +1,104 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205801"
+  },
+  "applications": ["*"],
+  "documentation": "DM / PTCC participant-side login. Wraps the built-in JHipster User.",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "firstName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lastName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "institute",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "primaryEmail",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "pattern"],
+      "fieldValidateRulesPattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+    },
+    {
+      "fieldName": "secondaryEmail",
+      "fieldType": "String",
+      "fieldValidateRules": ["pattern"],
+      "fieldValidateRulesPattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+    },
+    {
+      "fieldName": "phone",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "mobile",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "language",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "role",
+      "fieldType": "DataManagerRole",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "MANAGER,PTCC"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Status",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ACTIVE,INACTIVE,PENDING"
+    },
+    {
+      "fieldName": "qcAccess",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "viewOnlyAccess",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "enableTestResponseDate",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "enableModeOfReceipt",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "forceProfileCheck",
+      "fieldType": "Boolean"
+    }
+  ],
+  "name": "DataManager",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "user",
+      "relationshipName": "user",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one",
+      "relationshipWithBuiltInEntity": true
+    },
+    {
+      "otherEntityName": "country",
+      "relationshipName": "country",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "participant",
+      "otherEntityRelationshipName": "dataManagers",
+      "relationshipName": "participants",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

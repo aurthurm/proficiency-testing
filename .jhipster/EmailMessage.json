@@ -1,0 +1,86 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205823"
+  },
+  "applications": ["*"],
+  "documentation": "Outbound email queue with retry/failure tracking.",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "fromEmail",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fromName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "replyTo",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "toEmail",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "cc",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "bcc",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "subject",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "body",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "attachmentRef",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "EmailStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PENDING,SENT,FAILED,RETRYING"
+    },
+    {
+      "fieldName": "failureType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "failureReason",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "queuedOn",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "sentAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "retryCount",
+      "fieldType": "Integer"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "EmailMessage",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "mailTemplate",
+      "relationshipName": "template",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

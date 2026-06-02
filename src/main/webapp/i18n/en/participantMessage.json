@@ -1,0 +1,28 @@
+{
+  "proficiencyTestingApp": {
+    "participantMessage": {
+      "home": {
+        "title": "Participant Messages",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Participant Message",
+        "createOrEditLabel": "Create or edit a Participant Message",
+        "notFound": "No Participant Messages found"
+      },
+      "created": "A new Participant Message is created with identifier {{ param }}",
+      "updated": "A Participant Message is updated with identifier {{ param }}",
+      "deleted": "A Participant Message is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Participant Message {{ id }}?"
+      },
+      "detail": {
+        "title": "Participant Message"
+      },
+      "id": "ID",
+      "subject": "Subject",
+      "body": "Body",
+      "isRead": "Is Read",
+      "sentAt": "Sent At",
+      "participant": "Participant"
+    }
+  }
+}

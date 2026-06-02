@@ -1,0 +1,31 @@
+{
+  "proficiencyTestingApp": {
+    "apiRequestLog": {
+      "home": {
+        "title": "Api Request Logs",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Api Request Log",
+        "createOrEditLabel": "Create or edit a Api Request Log",
+        "notFound": "No Api Request Logs found"
+      },
+      "created": "A new Api Request Log is created with identifier {{ param }}",
+      "updated": "A Api Request Log is updated with identifier {{ param }}",
+      "deleted": "A Api Request Log is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Api Request Log {{ id }}?"
+      },
+      "detail": {
+        "title": "Api Request Log"
+      },
+      "id": "ID",
+      "transactionId": "Transaction Id",
+      "requestedBy": "Requested By",
+      "requestedOn": "Requested On",
+      "numberOfRecords": "Number Of Records",
+      "requestType": "Request Type",
+      "testType": "Test Type",
+      "apiUrl": "Api Url",
+      "dataFormat": "Data Format"
+    }
+  }
+}

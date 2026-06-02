@@ -1,0 +1,60 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205834"
+  },
+  "applications": ["*"],
+  "documentation": "Background job queue (SCH-01..07).",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "jobType",
+      "fieldType": "JobType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EVALUATION,REPORT_GENERATION,CERTIFICATE_GENERATION,CERTIFICATE_DISTRIBUTION,EMAIL_DISPATCH,DEADLINE_PROCESSING,STALE_CLEANUP"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "JobStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PENDING,RUNNING,COMPLETED,FAILED,CANCELLED,STALE"
+    },
+    {
+      "fieldName": "requestedBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "requestedOn",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "startedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "lastHeartbeat",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "completedAt",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "progressCompleted",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "progressTotal",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "summary",
+      "fieldType": "TextBlob"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "ScheduledJob",
+  "pagination": "pagination",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

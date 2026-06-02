@@ -1,0 +1,25 @@
+{
+  "proficiencyTestingApp": {
+    "notTestedReason": {
+      "home": {
+        "title": "Not Tested Reasons",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Not Tested Reason",
+        "createOrEditLabel": "Create or edit a Not Tested Reason",
+        "notFound": "No Not Tested Reasons found"
+      },
+      "created": "A new Not Tested Reason is created with identifier {{ param }}",
+      "updated": "A Not Tested Reason is updated with identifier {{ param }}",
+      "deleted": "A Not Tested Reason is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Not Tested Reason {{ id }}?"
+      },
+      "detail": {
+        "title": "Not Tested Reason"
+      },
+      "id": "ID",
+      "reason": "Reason",
+      "status": "Status"
+    }
+  }
+}

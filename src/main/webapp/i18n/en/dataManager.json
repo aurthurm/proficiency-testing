@@ -1,0 +1,41 @@
+{
+  "proficiencyTestingApp": {
+    "dataManager": {
+      "home": {
+        "title": "Data Managers",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Data Manager",
+        "createOrEditLabel": "Create or edit a Data Manager",
+        "notFound": "No Data Managers found"
+      },
+      "created": "A new Data Manager is created with identifier {{ param }}",
+      "updated": "A Data Manager is updated with identifier {{ param }}",
+      "deleted": "A Data Manager is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Data Manager {{ id }}?"
+      },
+      "detail": {
+        "title": "Data Manager"
+      },
+      "id": "ID",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "institute": "Institute",
+      "primaryEmail": "Primary Email",
+      "secondaryEmail": "Secondary Email",
+      "phone": "Phone",
+      "mobile": "Mobile",
+      "language": "Language",
+      "role": "Role",
+      "status": "Status",
+      "qcAccess": "Qc Access",
+      "viewOnlyAccess": "View Only Access",
+      "enableTestResponseDate": "Enable Test Response Date",
+      "enableModeOfReceipt": "Enable Mode Of Receipt",
+      "forceProfileCheck": "Force Profile Check",
+      "user": "User",
+      "country": "Country",
+      "participants": "Participants"
+    }
+  }
+}

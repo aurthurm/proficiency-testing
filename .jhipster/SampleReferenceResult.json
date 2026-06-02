@@ -1,0 +1,54 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205810"
+  },
+  "applications": ["*"],
+  "documentation": "Expected result for a sample. One row per (sample, assay/algorithm).",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "qualitativeResult",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "quantitativeValue",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "unit",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "lowerLimit",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "upperLimit",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "isControlExpected",
+      "fieldType": "Boolean"
+    }
+  ],
+  "name": "SampleReferenceResult",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "assay",
+      "relationshipName": "assay",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "shipmentSample",
+      "otherEntityRelationshipName": "referenceResults",
+      "relationshipName": "sample",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

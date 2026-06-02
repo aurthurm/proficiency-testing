@@ -1,0 +1,44 @@
+{
+  "annotations": {
+    "changelogDate": "20260602205813"
+  },
+  "applications": ["*"],
+  "documentation": "Scheme-specific dimension: DTS algorithm, VL/EID/TB assay, COVID gene, etc.",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "assayType",
+      "fieldType": "AssayType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "DTS_ALGORITHM,VL_ASSAY,EID_DETECTION_ASSAY,EID_EXTRACTION_ASSAY,TB_ASSAY,COVID19_GENE"
+    },
+    {
+      "fieldName": "manufacturer",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Status",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ACTIVE,INACTIVE,PENDING"
+    }
+  ],
+  "name": "Assay",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "scheme",
+      "otherEntityRelationshipName": "assays",
+      "relationshipName": "scheme",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

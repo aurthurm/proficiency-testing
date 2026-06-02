@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity DataManager.
+    -->
+    <changeSet id="20260602205801-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="data_manager"
+                                 constraintName="fk_data_manager__user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="country_id"
+                                 baseTableName="data_manager"
+                                 constraintName="fk_data_manager__country_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="country"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="data_manager_id"
+                                 baseTableName="rel_data_manager__participants"
+                                 constraintName="fk_rel_data_manager__participants__data_manager_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="data_manager"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="participants_id"
+                                 baseTableName="rel_data_manager__participants"
+                                 constraintName="fk_rel_data_manager__participants__participants_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="participant"
+                                 />
+    </changeSet>
+</databaseChangeLog>

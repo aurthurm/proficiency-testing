@@ -1,0 +1,30 @@
+{
+  "proficiencyTestingApp": {
+    "capaRecord": {
+      "home": {
+        "title": "Capa Records",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Capa Record",
+        "createOrEditLabel": "Create or edit a Capa Record",
+        "notFound": "No Capa Records found"
+      },
+      "created": "A new Capa Record is created with identifier {{ param }}",
+      "updated": "A Capa Record is updated with identifier {{ param }}",
+      "deleted": "A Capa Record is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Capa Record {{ id }}?"
+      },
+      "detail": {
+        "title": "Capa Record"
+      },
+      "id": "ID",
+      "rootCause": "Root Cause",
+      "actionTaken": "Action Taken",
+      "actionDate": "Action Date",
+      "status": "Status",
+      "followUpDate": "Follow Up Date",
+      "correctiveAction": "Corrective Action",
+      "shipmentParticipantMap": "Shipment Participant Map"
+    }
+  }
+}
