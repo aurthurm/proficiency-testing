@@ -15,7 +15,7 @@
 
 spring:
   application:
-    name: ept
+    name: proficiencyTesting
   cloud:
     consul:
       discovery:
@@ -44,13 +44,13 @@ spring:
           authorities-claim-name: auth
   task:
     execution:
-      thread-name-prefix: ept-task-
+      thread-name-prefix: proficiency-testing-task-
       pool:
         core-size: 1
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: ept-scheduling-
+      thread-name-prefix: proficiency-testing-scheduling-
       pool:
         size: 20
   thymeleaf:
@@ -67,9 +67,9 @@ server:
 # ===================================================================
 jhipster:
   clientApp:
-    name: 'eptApp'
+    name: 'proficiencyTestingApp'
   mail:
-    from: ept@localhost.com
+    from: proficiencyTesting@localhost.com
     base-url: http://127.0.0.1:8080
   logging:
     # To test json console appender

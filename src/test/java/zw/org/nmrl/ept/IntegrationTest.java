@@ -16,7 +16,7 @@ import zw.org.nmrl.ept.config.JacksonConfiguration;
 @Retention(RetentionPolicy.RUNTIME)
 @SpringBootTest(
     classes = {
-        EptApp.class,
+        ProficiencyTestingApp.class,
         JacksonConfiguration.class,
         AsyncSyncConfiguration.class,
         zw.org.nmrl.ept.config.JacksonHibernateConfiguration.class,

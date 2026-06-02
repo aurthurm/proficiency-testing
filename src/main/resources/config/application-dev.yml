@@ -61,7 +61,7 @@ spring:
       port: 8500
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:file:./target/h2db/db/ept;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:file:./target/h2db/db/proficiencyTesting;DB_CLOSE_DELAY=-1
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -92,6 +92,10 @@ server:
 # ===================================================================
 
 jhipster:
+  cache: # Cache configuration
+    hazelcast: # Hazelcast distributed cache
+      time-to-live-seconds: 3600
+      backup-count: 1
   # CORS is only enabled by default with the "dev" profile
   cors:
     # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
