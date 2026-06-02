@@ -1,18 +1,18 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: ept
+name: proficiencytesting
 services:
   app:
-    image: ept
+    image: proficiencytesting
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs,secret-samples
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/ept
-      - SPRING_DATASOURCE_USERNAME=ept
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/proficiencyTesting
+      - SPRING_DATASOURCE_USERNAME=proficiencyTesting
       - SPRING_DATASOURCE_PASSWORD=
-      - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgresql:5432/ept
+      - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgresql:5432/proficiencyTesting
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
