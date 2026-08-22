@@ -42,8 +42,7 @@ public class LegacySchemeResult implements Serializable {
     private String schemeCode;
 
     @NotNull
-    @Lob
-    @Column(name = "legacy_payload", nullable = false)
+    @Column(name = "legacy_payload", nullable = false, columnDefinition = "text")
     private String legacyPayload;
 
     @ManyToOne(fetch = FetchType.LAZY)
