@@ -17,7 +17,7 @@ import zw.org.nmrl.ept.domain.enumeration.Status;
 @Table(name = "assay")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Assay implements Serializable {
+public class Assay extends LegacyCompatibleEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class Assay implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, length = 500)
     private String name;
 
     @NotNull

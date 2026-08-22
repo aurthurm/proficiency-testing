@@ -31,7 +31,20 @@ public class LegacyMigrationReconciliationService {
         new CoreMapping("mail_template", "mail_template"),
         new CoreMapping("global_config", "global_configuration"),
         new CoreMapping("system_config", "global_configuration"),
-        new CoreMapping("scheme_config", "scheme_configuration")
+        new CoreMapping("scheme_config", "scheme_configuration"),
+        new CoreMapping("r_testkitnames", "test_kit"),
+        new CoreMapping("r_dbs_eia", "assay"),
+        new CoreMapping("r_dbs_wb", "assay"),
+        new CoreMapping("r_eid_detection_assay", "assay"),
+        new CoreMapping("r_eid_extraction_assay", "assay"),
+        new CoreMapping("r_recency_assay", "assay"),
+        new CoreMapping("r_tb_assay", "assay"),
+        new CoreMapping("r_vl_assay", "assay"),
+        new CoreMapping("r_covid19_gene_types", "assay"),
+        new CoreMapping("r_test_type_covid19", "assay"),
+        new CoreMapping("certificate_batches", "certificate_batch"),
+        new CoreMapping("report_config", "report_configuration"),
+        new CoreMapping("track_report_downloaded_history", "legacy_report_download")
     );
 
     private final MigrationTarget target;
@@ -51,6 +64,8 @@ public class LegacyMigrationReconciliationService {
         if (properties.isPromoteCore()) {
             reconcileCoreMappings(batchId, issues);
             reconcileOperationalRelationships(batchId, issues);
+            reconcileSchemeResults(batchId, issues);
+            reconcileCertificateTemplates(batchId, issues);
         }
         if (properties.getFiles().isEnabled()) {
             reconcileFiles(batchId, expectedFiles, issues);
@@ -248,6 +263,68 @@ public class LegacyMigrationReconciliationService {
                     sourceRows,
                     sourceRows - missing,
                     "Every archived relationship must resolve to typed target rows"
+                )
+            );
+        }
+    }
+
+    private void reconcileSchemeResults(UUID batchId, List<MigrationReconciliationIssue> issues) {
+        long sourceRows = count(
+            "WITH scheme_tables AS (" +
+            "SELECT payload::jsonb ->> 'response_table' response_table, payload::jsonb ->> 'reference_result_table' reference_table " +
+            "FROM legacy_record_archive WHERE source_table = 'scheme_list' AND last_seen_batch_id = ?) " +
+            "SELECT COUNT(*) FROM legacy_record_archive a WHERE a.last_seen_batch_id = ? AND EXISTS (" +
+            "SELECT 1 FROM scheme_tables s WHERE a.source_table = s.response_table OR a.source_table = s.reference_table)",
+            batchId,
+            batchId
+        );
+        long typedRows = count(
+            "SELECT COUNT(*) FROM migration_id_map WHERE target_table = 'legacy_scheme_result' AND migration_batch_id = ?",
+            batchId
+        );
+        long resolvableRows = count(
+            "SELECT COUNT(*) FROM migration_id_map m JOIN legacy_scheme_result r ON r.id = m.target_id " +
+            "WHERE m.target_table = 'legacy_scheme_result' AND m.migration_batch_id = ?",
+            batchId
+        );
+        if (sourceRows != typedRows || typedRows != resolvableRows) {
+            issues.add(
+                new MigrationReconciliationIssue(
+                    "SCHEME_RESULTS",
+                    "scheme-specific-results",
+                    sourceRows,
+                    resolvableRows,
+                    "Every configured response/reference result row must have a resolvable typed envelope; maps=" + typedRows
+                )
+            );
+        }
+    }
+
+    private void reconcileCertificateTemplates(UUID batchId, List<MigrationReconciliationIssue> issues) {
+        long sourceRows = count(
+            "SELECT COUNT(*) FROM legacy_record_archive WHERE source_table = 'certificate_templates' AND last_seen_batch_id = ?",
+            batchId
+        );
+        long expectedTemplates = sourceRows * 2;
+        long templates = count(
+            "SELECT COUNT(*) FROM migration_id_map WHERE source_table = 'certificate_templates' " +
+            "AND target_table = 'certificate_template' AND migration_batch_id = ?",
+            batchId
+        );
+        long resolvable = count(
+            "SELECT COUNT(*) FROM migration_id_map m JOIN certificate_template t ON t.id = m.target_id " +
+            "WHERE m.source_table = 'certificate_templates' AND m.target_table = 'certificate_template' " +
+            "AND m.migration_batch_id = ?",
+            batchId
+        );
+        if (expectedTemplates != templates || templates != resolvable) {
+            issues.add(
+                new MigrationReconciliationIssue(
+                    "CERTIFICATE_TEMPLATES",
+                    "certificate_templates",
+                    expectedTemplates,
+                    resolvable,
+                    "Each legacy certificate-template row must produce participation and excellence templates; maps=" + templates
                 )
             );
         }

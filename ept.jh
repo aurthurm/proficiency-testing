@@ -60,7 +60,11 @@ enum AssayType {
   EID_DETECTION_ASSAY,
   EID_EXTRACTION_ASSAY,
   TB_ASSAY,
-  COVID19_GENE
+  COVID19_GENE,
+  COVID19_TEST_TYPE,
+  DBS_EIA,
+  DBS_WB,
+  RECENCY_ASSAY
 }
 
 enum CertificateType { PARTICIPATION, EXCELLENCE }
@@ -280,7 +284,7 @@ entity ShipmentParticipantMap {
 
 /** Scheme-specific dimension: DTS algorithm, VL/EID/TB assay, COVID gene, etc. */
 entity Assay {
-  name String required
+  name String required maxlength(500)
   assayType AssayType required
   manufacturer String
   status Status required
@@ -327,7 +331,7 @@ entity CapaRecord {
 
 entity CertificateTemplate {
   certificateType CertificateType required
-  fileRef String
+  fileRef String maxlength(500)
   detectedFields TextBlob
 }
 
@@ -337,14 +341,14 @@ entity CertificateBatch {
   excellenceCount Integer
   participationCount Integer
   skippedCount Integer
-  downloadUrl String
-  errorMessage String
+  downloadUrl String maxlength(500)
+  errorMessage TextBlob
   approvedBy String
   approvedOn Instant
 }
 
 entity ReportConfiguration {
-  reportHeader String
+  reportHeader TextBlob
   logo String
   logoRight String
   layout String

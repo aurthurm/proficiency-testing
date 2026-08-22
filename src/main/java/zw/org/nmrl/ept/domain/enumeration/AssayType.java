@@ -10,4 +10,8 @@ public enum AssayType {
     EID_EXTRACTION_ASSAY,
     TB_ASSAY,
     COVID19_GENE,
+    COVID19_TEST_TYPE,
+    DBS_EIA,
+    DBS_WB,
+    RECENCY_ASSAY,
 }

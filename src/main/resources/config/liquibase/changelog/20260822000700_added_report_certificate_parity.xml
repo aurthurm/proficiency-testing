@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260822000700-1" author="openai">
+        <addColumn tableName="certificate_template">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+        </addColumn>
+        <addUniqueConstraint tableName="certificate_template" columnNames="legacy_source_id"
+            constraintName="ux_certificate_template__legacy_source_id"/>
+        <modifyDataType tableName="certificate_template" columnName="file_ref" newDataType="varchar(500)"/>
+
+        <addColumn tableName="certificate_batch">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+        </addColumn>
+        <addUniqueConstraint tableName="certificate_batch" columnNames="legacy_source_id"
+            constraintName="ux_certificate_batch__legacy_source_id"/>
+        <modifyDataType tableName="certificate_batch" columnName="download_url" newDataType="varchar(500)"/>
+        <modifyDataType tableName="certificate_batch" columnName="error_message" newDataType="${clobType}"/>
+
+        <addColumn tableName="report_configuration">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+        </addColumn>
+        <addUniqueConstraint tableName="report_configuration" columnNames="legacy_source_id"
+            constraintName="ux_report_configuration__legacy_source_id"/>
+        <modifyDataType tableName="report_configuration" columnName="report_header" newDataType="${clobType}"/>
+    </changeSet>
+
+    <changeSet id="20260822000700-2" author="openai">
+        <createTable tableName="legacy_report_download">
+            <column name="id" type="bigint"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="report_type" type="varchar(100)"/>
+            <column name="downloaded_on" type="${datetimeType}"><constraints nullable="false"/></column>
+            <column name="downloaded_by" type="varchar(256)"><constraints nullable="false"/></column>
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+            <column name="shipment_id" type="bigint"/>
+        </createTable>
+        <addUniqueConstraint tableName="legacy_report_download" columnNames="legacy_source_id"
+            constraintName="ux_legacy_report_download__legacy_source_id"/>
+        <addForeignKeyConstraint baseTableName="legacy_report_download" baseColumnNames="shipment_id"
+            referencedTableName="shipment" referencedColumnNames="id"
+            constraintName="fk_legacy_report_download__shipment" onDelete="SET NULL"/>
+    </changeSet>
+</databaseChangeLog>

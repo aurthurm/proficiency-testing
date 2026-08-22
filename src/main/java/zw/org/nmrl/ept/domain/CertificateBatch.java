@@ -19,7 +19,7 @@ import zw.org.nmrl.ept.domain.enumeration.CertificateBatchStatus;
 @Table(name = "certificate_batch")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class CertificateBatch implements Serializable {
+public class CertificateBatch extends LegacyCompatibleEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -48,9 +48,10 @@ public class CertificateBatch implements Serializable {
     @Column(name = "skipped_count")
     private Integer skippedCount;
 
-    @Column(name = "download_url")
+    @Column(name = "download_url", length = 500)
     private String downloadUrl;
 
+    @Lob
     @Column(name = "error_message")
     private String errorMessage;
 

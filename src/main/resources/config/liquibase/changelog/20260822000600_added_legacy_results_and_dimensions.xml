@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260822000600-1" author="openai">
+        <addColumn tableName="test_kit">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+        </addColumn>
+        <addUniqueConstraint tableName="test_kit" columnNames="legacy_source_id" constraintName="ux_test_kit__legacy_source_id"/>
+        <addColumn tableName="assay">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+        </addColumn>
+        <addUniqueConstraint tableName="assay" columnNames="legacy_source_id" constraintName="ux_assay__legacy_source_id"/>
+        <modifyDataType tableName="assay" columnName="name" newDataType="varchar(500)"/>
+    </changeSet>
+
+    <changeSet id="20260822000600-2" author="openai">
+        <createTable tableName="rel_test_kit__schemes">
+            <column name="test_kit_id" type="bigint"><constraints nullable="false"/></column>
+            <column name="scheme_id" type="bigint"><constraints nullable="false"/></column>
+        </createTable>
+        <addPrimaryKey tableName="rel_test_kit__schemes" columnNames="test_kit_id,scheme_id" constraintName="pk_test_kit_schemes"/>
+        <addForeignKeyConstraint baseTableName="rel_test_kit__schemes" baseColumnNames="test_kit_id"
+            referencedTableName="test_kit" referencedColumnNames="id" constraintName="fk_test_kit_schemes__test_kit" onDelete="CASCADE"/>
+        <addForeignKeyConstraint baseTableName="rel_test_kit__schemes" baseColumnNames="scheme_id"
+            referencedTableName="scheme" referencedColumnNames="id" constraintName="fk_test_kit_schemes__scheme" onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="20260822000600-3" author="openai">
+        <createTable tableName="legacy_scheme_result">
+            <column name="id" type="bigint"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="source_table" type="varchar(128)"><constraints nullable="false"/></column>
+            <column name="source_row_key" type="varchar(64)"><constraints nullable="false"/></column>
+            <column name="result_category" type="varchar(32)"><constraints nullable="false"/></column>
+            <column name="scheme_code" type="varchar(64)"/>
+            <column name="legacy_payload" type="text"><constraints nullable="false"/></column>
+            <column name="shipment_participant_map_id" type="bigint"/>
+            <column name="shipment_id" type="bigint"/>
+        </createTable>
+        <addUniqueConstraint tableName="legacy_scheme_result" columnNames="source_table,source_row_key"
+            constraintName="ux_legacy_scheme_result__source_row"/>
+        <addForeignKeyConstraint baseTableName="legacy_scheme_result" baseColumnNames="shipment_participant_map_id"
+            referencedTableName="shipment_participant_map" referencedColumnNames="id"
+            constraintName="fk_legacy_scheme_result__shipment_map" onDelete="SET NULL"/>
+        <addForeignKeyConstraint baseTableName="legacy_scheme_result" baseColumnNames="shipment_id"
+            referencedTableName="shipment" referencedColumnNames="id"
+            constraintName="fk_legacy_scheme_result__shipment" onDelete="SET NULL"/>
+    </changeSet>
+</databaseChangeLog>
