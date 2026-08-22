@@ -2,6 +2,7 @@ package zw.org.nmrl.ept.migration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.Connection;
@@ -11,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,6 +37,7 @@ public class LegacyBatchMigrationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(LegacyBatchMigrationService.class);
     private static final Pattern SAFE_IDENTIFIER = Pattern.compile("[A-Za-z0-9_]+", Pattern.CASE_INSENSITIVE);
+    private static final BigInteger CHECKSUM_MASK = BigInteger.ONE.shiftLeft(256).subtract(BigInteger.ONE);
     private static final String ARCHIVE_SQL = """
         INSERT INTO legacy_record_archive
             (source_table, source_primary_key, source_primary_key_hash, payload, row_checksum,
@@ -158,7 +161,8 @@ public class LegacyBatchMigrationService {
             String sql = selectSql(table, primaryKeys);
             long sourceRows = 0;
             long archivedRows = 0;
-            byte[] tableChecksum = new byte[32];
+            BigInteger tableChecksum = BigInteger.ZERO;
+            Map<String, Long> duplicateCounts = primaryKeys.isEmpty() ? new HashMap<>() : Map.of();
             List<Object[]> writeBatch = new ArrayList<>(properties.getBatchSize());
 
             try (PreparedStatement statement = source.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
@@ -170,10 +174,11 @@ public class LegacyBatchMigrationService {
                         ObjectNode payload = rowAsJson(rows, metadata);
                         String payloadJson = objectMapper.writeValueAsString(payload);
                         String rowChecksum = sha256(payloadJson);
-                        ObjectNode sourcePrimaryKey = sourcePrimaryKey(payload, primaryKeys, rowChecksum, sourceRows);
+                        long duplicateOrdinal = primaryKeys.isEmpty() ? duplicateCounts.merge(rowChecksum, 1L, Long::sum) : 0;
+                        ObjectNode sourcePrimaryKey = sourcePrimaryKey(payload, primaryKeys, rowChecksum, duplicateOrdinal);
                         String sourcePrimaryKeyJson = objectMapper.writeValueAsString(sourcePrimaryKey);
                         String sourcePrimaryKeyHash = sha256(sourcePrimaryKeyJson);
-                        xorChecksum(tableChecksum, HexFormat.of().parseHex(rowChecksum));
+                        tableChecksum = tableChecksum.add(new BigInteger(rowChecksum, 16)).and(CHECKSUM_MASK);
                         Instant now = Instant.now();
                         writeBatch.add(
                             new Object[] {
@@ -196,7 +201,7 @@ public class LegacyBatchMigrationService {
             }
             archivedRows += flush(writeBatch);
             long staleRows = countStaleRows(table, batchId);
-            String checksum = HexFormat.of().formatHex(tableChecksum);
+            String checksum = String.format("%064x", tableChecksum);
             LegacyTableMigrationSummary summary = new LegacyTableMigrationSummary(
                 table,
                 "COMPLETED",
@@ -227,11 +232,11 @@ public class LegacyBatchMigrationService {
         return payload;
     }
 
-    private ObjectNode sourcePrimaryKey(ObjectNode payload, List<String> primaryKeys, String rowChecksum, long ordinal) {
+    private ObjectNode sourcePrimaryKey(ObjectNode payload, List<String> primaryKeys, String rowChecksum, long duplicateOrdinal) {
         ObjectNode key = objectMapper.createObjectNode();
         if (primaryKeys.isEmpty()) {
             key.put("__row_checksum", rowChecksum);
-            key.put("__row_ordinal", ordinal);
+            key.put("__duplicate_ordinal", duplicateOrdinal);
             return key;
         }
         for (String primaryKey : primaryKeys) {
@@ -328,12 +333,6 @@ public class LegacyBatchMigrationService {
     private String sha256(String value) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         return HexFormat.of().formatHex(digest.digest(value.getBytes(StandardCharsets.UTF_8)));
-    }
-
-    private void xorChecksum(byte[] aggregate, byte[] rowHash) {
-        for (int i = 0; i < aggregate.length; i++) {
-            aggregate[i] ^= rowHash[i];
-        }
     }
 
     private void startBatch(UUID id, String sourceVersion, String sourceDatabase, int tableCount) {
