@@ -54,6 +54,7 @@ public class LegacyBatchMigrationService {
     private final ApplicationProperties.Migration properties;
     private final ObjectProvider<LegacyCorePromoter> corePromoter;
     private final ObjectProvider<LegacyFileMigrationService> fileMigrationService;
+    private final LegacyMigrationReconciliationService reconciliationService;
 
     public LegacyBatchMigrationService(
         @Qualifier("legacySourceDataSource") DataSource legacySource,
@@ -61,7 +62,8 @@ public class LegacyBatchMigrationService {
         ObjectMapper objectMapper,
         ApplicationProperties applicationProperties,
         ObjectProvider<LegacyCorePromoter> corePromoter,
-        ObjectProvider<LegacyFileMigrationService> fileMigrationService
+        ObjectProvider<LegacyFileMigrationService> fileMigrationService,
+        LegacyMigrationReconciliationService reconciliationService
     ) {
         this.legacySource = legacySource;
         this.target = new JdbcTemplate(targetDataSource);
@@ -69,6 +71,7 @@ public class LegacyBatchMigrationService {
         this.properties = applicationProperties.getMigration();
         this.corePromoter = corePromoter;
         this.fileMigrationService = fileMigrationService;
+        this.reconciliationService = reconciliationService;
     }
 
     public LegacyMigrationSummary migrate() throws Exception {
@@ -122,6 +125,12 @@ public class LegacyBatchMigrationService {
                 if (fileSummary.failed() > 0 && properties.isFailOnError()) {
                     throw new IllegalStateException(fileSummary.failed() + " legacy files failed checksum-verified migration");
                 }
+            }
+
+            MigrationReconciliationReport reconciliation = reconciliationService.reconcile(batchId);
+            errors += reconciliation.issues().size();
+            if (!reconciliation.isClean() && properties.isFailOnError()) {
+                throw new IllegalStateException(reconciliation.issues().size() + " migration reconciliation checks failed");
             }
 
             completeBatch(batchId, "COMPLETED", summaries.size(), archivedRows, errors, null);
