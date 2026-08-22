@@ -100,6 +100,7 @@ public class LegacyBatchMigrationService {
 
         startBatch(batchId, sourceVersion, sourceDatabase, tables.size());
         List<LegacyTableMigrationSummary> summaries = new ArrayList<>();
+        int tablesCompleted = 0;
         long archivedRows = 0;
         long filesMigrated = 0;
         long filesDiscovered = 0;
@@ -110,7 +111,9 @@ public class LegacyBatchMigrationService {
                 LegacyTableMigrationSummary summary = archiveTable(batchId, table);
                 summaries.add(summary);
                 archivedRows += summary.archivedRows();
-                if (!"COMPLETED".equals(summary.status())) {
+                if ("COMPLETED".equals(summary.status())) {
+                    tablesCompleted++;
+                } else {
                     errors++;
                     if (properties.isFailOnError()) {
                         throw new IllegalStateException("Failed to archive legacy table " + table + ": " + summary.errorMessage());
@@ -146,19 +149,19 @@ public class LegacyBatchMigrationService {
                 throw new IllegalStateException(reconciliation.issues().size() + " migration reconciliation checks failed");
             }
 
-            completeBatch(batchId, errors == 0 ? "COMPLETED" : "COMPLETED_WITH_ERRORS", summaries.size(), archivedRows, errors, null);
+            completeBatch(batchId, errors == 0 ? "COMPLETED" : "COMPLETED_WITH_ERRORS", tablesCompleted, archivedRows, errors, null);
             return new LegacyMigrationSummary(
                 batchId,
                 sourceVersion,
                 tables.size(),
-                summaries.size(),
+                tablesCompleted,
                 archivedRows,
                 filesMigrated,
                 errors,
                 List.copyOf(summaries)
             );
         } catch (Exception e) {
-            completeBatch(batchId, "FAILED", summaries.size(), archivedRows, errors + 1, e.getMessage());
+            completeBatch(batchId, "FAILED", tablesCompleted, archivedRows, errors + 1, e.getMessage());
             throw e;
         }
     }
