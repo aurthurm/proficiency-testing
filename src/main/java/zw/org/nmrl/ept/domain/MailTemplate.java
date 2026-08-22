@@ -15,7 +15,7 @@ import zw.org.nmrl.ept.domain.enumeration.ContentStatus;
 @Table(name = "mail_template")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class MailTemplate implements Serializable {
+public class MailTemplate extends LegacyCompatibleEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

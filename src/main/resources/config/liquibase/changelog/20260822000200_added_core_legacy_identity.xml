@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260822000200-1" author="openai">
+        <addColumn tableName="country">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+        </addColumn>
+        <addColumn tableName="participant">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+        </addColumn>
+        <addColumn tableName="data_manager">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+            <column name="legacy_password_hash" type="text"/>
+            <column name="force_password_reset" type="boolean"/>
+            <column name="last_login" type="${datetimeType}"/>
+            <column name="login_ban" type="boolean"/>
+            <column name="legacy_auth_token" type="varchar(255)"/>
+            <column name="api_token_generated_at" type="${datetimeType}"/>
+        </addColumn>
+        <addColumn tableName="scheme">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+        </addColumn>
+        <addColumn tableName="enrollment">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+        </addColumn>
+        <addColumn tableName="distribution">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+        </addColumn>
+        <addColumn tableName="shipment">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+        </addColumn>
+        <addColumn tableName="shipment_participant_map">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+        </addColumn>
+        <addColumn tableName="mode_of_receipt">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+        </addColumn>
+        <addColumn tableName="not_tested_reason">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+        </addColumn>
+        <addColumn tableName="mail_template">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+        </addColumn>
+
+        <addUniqueConstraint tableName="country" columnNames="legacy_source_id" constraintName="ux_country__legacy_source_id"/>
+        <addUniqueConstraint tableName="participant" columnNames="legacy_source_id" constraintName="ux_participant__legacy_source_id"/>
+        <addUniqueConstraint tableName="data_manager" columnNames="legacy_source_id" constraintName="ux_data_manager__legacy_source_id"/>
+        <addUniqueConstraint tableName="scheme" columnNames="legacy_source_id" constraintName="ux_scheme__legacy_source_id"/>
+        <addUniqueConstraint tableName="enrollment" columnNames="legacy_source_id" constraintName="ux_enrollment__legacy_source_id"/>
+        <addUniqueConstraint tableName="distribution" columnNames="legacy_source_id" constraintName="ux_distribution__legacy_source_id"/>
+        <addUniqueConstraint tableName="shipment" columnNames="legacy_source_id" constraintName="ux_shipment__legacy_source_id"/>
+        <addUniqueConstraint tableName="shipment_participant_map" columnNames="legacy_source_id" constraintName="ux_shipment_participant_map__legacy_source_id"/>
+        <addUniqueConstraint tableName="mode_of_receipt" columnNames="legacy_source_id" constraintName="ux_mode_of_receipt__legacy_source_id"/>
+        <addUniqueConstraint tableName="not_tested_reason" columnNames="legacy_source_id" constraintName="ux_not_tested_reason__legacy_source_id"/>
+        <addUniqueConstraint tableName="mail_template" columnNames="legacy_source_id" constraintName="ux_mail_template__legacy_source_id"/>
+    </changeSet>
+</databaseChangeLog>

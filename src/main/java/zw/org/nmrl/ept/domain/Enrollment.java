@@ -17,7 +17,7 @@ import zw.org.nmrl.ept.domain.enumeration.EnrollmentStatus;
 @Table(name = "enrollment")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Enrollment implements Serializable {
+public class Enrollment extends LegacyCompatibleEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

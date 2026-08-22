@@ -1,16 +1,19 @@
 // ============================================================================
 // ePT (Electronic Proficiency Testing) — Domain Model
-// JHipster 8.x  |  Greenfield modernization (NOT bound to legacy PHP schema)
+// JHipster 9.x  |  Migration-compatible modernization
 // ----------------------------------------------------------------------------
 // Design principles applied:
 //   * Boolean instead of legacy "yes"/"no" String flags
 //   * Enums instead of free-text status strings
-//   * Results modelled by MODALITY (qualitative/quantitative), not per-scheme
-//     tables; scheme-specific dimensions carried by the Assay reference entity
+//   * Results modelled by MODALITY in the operational schema. Every legacy
+//     per-scheme row is first retained losslessly in legacy_record_archive;
+//     typed scheme detail models can therefore be added without data loss.
 //   * Reference/catalog data normalised into proper entities (no numbered
 //     custom_field columns; an EAV pair is used instead)
-//   * Auth state (password reset, activation, last login) lives on the
-//     built-in JHipster User entity — NOT duplicated on DataManager
+//   * Legacy authentication hashes and state remain on DataManager until a
+//     verified login migration moves the account to the JHipster User model.
+//   * Core migration targets inherit legacySourceId and legacyPayload from the
+//     hand-maintained LegacyCompatibleEntity mapped superclass.
 //   * Spring Data JPA auditing (createdBy/createdDate/...) is intended via a
 //     shared base class added after generation; explicit audit columns are
 //     kept only where they carry domain meaning

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.annotations.Cache;
@@ -19,7 +20,7 @@ import zw.org.nmrl.ept.domain.enumeration.Status;
 @Table(name = "data_manager")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class DataManager implements Serializable {
+public class DataManager extends LegacyCompatibleEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -81,6 +82,25 @@ public class DataManager implements Serializable {
 
     @Column(name = "force_profile_check")
     private Boolean forceProfileCheck;
+
+    @Lob
+    @Column(name = "legacy_password_hash")
+    private String legacyPasswordHash;
+
+    @Column(name = "force_password_reset")
+    private Boolean forcePasswordReset;
+
+    @Column(name = "last_login")
+    private Instant lastLogin;
+
+    @Column(name = "login_ban")
+    private Boolean loginBan;
+
+    @Column(name = "legacy_auth_token")
+    private String legacyAuthToken;
+
+    @Column(name = "api_token_generated_at")
+    private Instant apiTokenGeneratedAt;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
@@ -307,6 +327,54 @@ public class DataManager implements Serializable {
 
     public void setForceProfileCheck(Boolean forceProfileCheck) {
         this.forceProfileCheck = forceProfileCheck;
+    }
+
+    public String getLegacyPasswordHash() {
+        return legacyPasswordHash;
+    }
+
+    public void setLegacyPasswordHash(String legacyPasswordHash) {
+        this.legacyPasswordHash = legacyPasswordHash;
+    }
+
+    public Boolean getForcePasswordReset() {
+        return forcePasswordReset;
+    }
+
+    public void setForcePasswordReset(Boolean forcePasswordReset) {
+        this.forcePasswordReset = forcePasswordReset;
+    }
+
+    public Instant getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Instant lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public Boolean getLoginBan() {
+        return loginBan;
+    }
+
+    public void setLoginBan(Boolean loginBan) {
+        this.loginBan = loginBan;
+    }
+
+    public String getLegacyAuthToken() {
+        return legacyAuthToken;
+    }
+
+    public void setLegacyAuthToken(String legacyAuthToken) {
+        this.legacyAuthToken = legacyAuthToken;
+    }
+
+    public Instant getApiTokenGeneratedAt() {
+        return apiTokenGeneratedAt;
+    }
+
+    public void setApiTokenGeneratedAt(Instant apiTokenGeneratedAt) {
+        this.apiTokenGeneratedAt = apiTokenGeneratedAt;
     }
 
     public User getUser() {

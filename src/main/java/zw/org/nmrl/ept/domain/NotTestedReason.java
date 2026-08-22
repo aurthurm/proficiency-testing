@@ -15,7 +15,7 @@ import zw.org.nmrl.ept.domain.enumeration.Status;
 @Table(name = "not_tested_reason")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class NotTestedReason implements Serializable {
+public class NotTestedReason extends LegacyCompatibleEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

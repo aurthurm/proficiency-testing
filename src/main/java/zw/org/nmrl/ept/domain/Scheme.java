@@ -20,7 +20,7 @@ import zw.org.nmrl.ept.domain.enumeration.Status;
 @Table(name = "scheme")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Scheme implements Serializable {
+public class Scheme extends LegacyCompatibleEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
