@@ -36,6 +36,9 @@ public class LegacyMigrationRunner implements ApplicationRunner {
             summary.filesMigrated(),
             summary.errorCount()
         );
-        SpringApplication.exit(applicationContext, () -> summary.errorCount() == 0 ? 0 : 2);
+        if (summary.errorCount() != 0) {
+            throw new IllegalStateException("Legacy migration completed with " + summary.errorCount() + " errors");
+        }
+        SpringApplication.exit(applicationContext, () -> 0);
     }
 }

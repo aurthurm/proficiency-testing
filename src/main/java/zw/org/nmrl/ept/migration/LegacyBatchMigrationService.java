@@ -146,7 +146,7 @@ public class LegacyBatchMigrationService {
                 throw new IllegalStateException(reconciliation.issues().size() + " migration reconciliation checks failed");
             }
 
-            completeBatch(batchId, "COMPLETED", summaries.size(), archivedRows, errors, null);
+            completeBatch(batchId, errors == 0 ? "COMPLETED" : "COMPLETED_WITH_ERRORS", summaries.size(), archivedRows, errors, null);
             return new LegacyMigrationSummary(
                 batchId,
                 sourceVersion,
@@ -359,7 +359,10 @@ public class LegacyBatchMigrationService {
     private String readSourceVersion(Connection source) {
         try (PreparedStatement statement = source.prepareStatement("SELECT value FROM system_config WHERE config = 'app_version'")) {
             try (ResultSet result = statement.executeQuery()) {
-                return result.next() ? result.getString(1) : "unknown";
+                if (!result.next() || result.getString(1) == null) {
+                    return "unknown";
+                }
+                return result.getString(1).trim();
             }
         } catch (Exception e) {
             LOG.warn("Could not determine the source ePT version", e);
