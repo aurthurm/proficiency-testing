@@ -17,6 +17,8 @@ public class ApplicationProperties {
 
     private final Migration migration = new Migration();
 
+    private final LegacyFiles legacyFiles = new LegacyFiles();
+
     // jhipster-needle-application-properties-property
 
     public Liquibase getLiquibase() {
@@ -25,6 +27,10 @@ public class ApplicationProperties {
 
     public Migration getMigration() {
         return migration;
+    }
+
+    public LegacyFiles getLegacyFiles() {
+        return legacyFiles;
     }
 
     // jhipster-needle-application-properties-property-getter
@@ -218,6 +224,29 @@ public class ApplicationProperties {
             public void setOverwrite(boolean overwrite) {
                 this.overwrite = overwrite;
             }
+        }
+    }
+
+    /** Read-only access to checksum-verified files after cutover. */
+    public static class LegacyFiles {
+
+        private boolean enabled;
+        private String root;
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public String getRoot() {
+            return root;
+        }
+
+        public void setRoot(String root) {
+            this.root = root;
         }
     }
 

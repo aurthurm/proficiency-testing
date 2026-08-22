@@ -242,6 +242,9 @@ jhipster:
 
 # application:
 application:
+  legacy-files:
+    enabled: ${EPT_LEGACY_FILE_STORE_ENABLED:false}
+    root: ${EPT_LEGACY_FILE_STORE_ROOT:${EPT_TARGET_FILES_ROOT:}}
   migration:
     enabled: ${EPT_MIGRATION_ENABLED:false}
     promote-core: ${EPT_MIGRATION_PROMOTE_CORE:false}
