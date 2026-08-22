@@ -11,20 +11,20 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.support.StaticListableBeanFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.mysql.MySQLContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import zw.org.nmrl.ept.config.ApplicationProperties;
 
 @Testcontainers(disabledWithoutDocker = true)
 class LegacyBatchMigrationIntegrationTest {
 
     @Container
-    private static final MySQLContainer<?> MYSQL = new MySQLContainer<>("mysql:8.4");
+    private static final MySQLContainer MYSQL = new MySQLContainer("mysql:8.4");
 
     @Container
-    private static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:17");
+    private static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:17");
 
     private static HikariDataSource source;
     private static HikariDataSource targetDataSource;
