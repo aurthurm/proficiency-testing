@@ -54,9 +54,9 @@ public class PostgresLegacyCorePromoter implements LegacyCorePromoter {
 
     @Override
     public void promote(UUID batchId) {
-        migrationTarget.write(() -> {
-            Map<String, Object> parameters = Map.of("batchId", batchId);
-            for (String path : PROMOTION_SCRIPTS) {
+        Map<String, Object> parameters = Map.of("batchId", batchId);
+        for (String path : PROMOTION_SCRIPTS) {
+            migrationTarget.write(() -> {
                 try {
                     ClassPathResource resource = new ClassPathResource(path);
                     String sql = resource.getContentAsString(StandardCharsets.UTF_8);
@@ -65,7 +65,7 @@ public class PostgresLegacyCorePromoter implements LegacyCorePromoter {
                 } catch (Exception e) {
                     throw new IllegalStateException("Failed to apply legacy promotion script " + path, e);
                 }
-            }
-        });
+            });
+        }
     }
 }
