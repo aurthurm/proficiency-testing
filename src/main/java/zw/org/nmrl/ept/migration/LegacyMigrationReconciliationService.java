@@ -20,13 +20,18 @@ public class LegacyMigrationReconciliationService {
         new CoreMapping("scheme_list", "scheme"),
         new CoreMapping("participant", "participant"),
         new CoreMapping("data_manager", "data_manager"),
+        new CoreMapping("data_manager", "jhi_user"),
+        new CoreMapping("system_admin", "jhi_user"),
         new CoreMapping("r_modes_of_receipt", "mode_of_receipt"),
         new CoreMapping("r_response_not_tested_reasons", "not_tested_reason"),
         new CoreMapping("distributions", "distribution"),
         new CoreMapping("enrollments", "enrollment"),
         new CoreMapping("shipment", "shipment"),
         new CoreMapping("shipment_participant_map", "shipment_participant_map"),
-        new CoreMapping("mail_template", "mail_template")
+        new CoreMapping("mail_template", "mail_template"),
+        new CoreMapping("global_config", "global_configuration"),
+        new CoreMapping("system_config", "global_configuration"),
+        new CoreMapping("scheme_config", "scheme_configuration")
     );
 
     private final MigrationTarget target;
@@ -45,6 +50,7 @@ public class LegacyMigrationReconciliationService {
         reconcileArchivedTables(batchId, expectedTables, issues);
         if (properties.isPromoteCore()) {
             reconcileCoreMappings(batchId, issues);
+            reconcileOperationalRelationships(batchId, issues);
         }
         if (properties.getFiles().isEnabled()) {
             reconcileFiles(batchId, expectedFiles, issues);
@@ -195,6 +201,56 @@ public class LegacyMigrationReconciliationService {
             },
             batchId
         );
+    }
+
+    private void reconcileOperationalRelationships(UUID batchId, List<MigrationReconciliationIssue> issues) {
+        reconcileRelationship(
+            batchId,
+            issues,
+            "participant_manager_map",
+            "SELECT COUNT(*) FROM legacy_record_archive a " +
+            "LEFT JOIN data_manager d ON d.legacy_source_id = a.payload::jsonb ->> 'dm_id' " +
+            "LEFT JOIN participant p ON p.legacy_source_id = a.payload::jsonb ->> 'participant_id' " +
+            "WHERE a.source_table = 'participant_manager_map' AND a.last_seen_batch_id = ? " +
+            "AND (d.id IS NULL OR p.id IS NULL OR NOT EXISTS (SELECT 1 FROM rel_data_manager__participants r " +
+            "WHERE r.data_manager_id = d.id AND r.participants_id = p.id))"
+        );
+        reconcileRelationship(
+            batchId,
+            issues,
+            "ptcc_countries_map",
+            "SELECT COUNT(*) FROM legacy_record_archive a " +
+            "LEFT JOIN data_manager d ON d.legacy_source_id = a.payload::jsonb ->> 'ptcc_id' " +
+            "LEFT JOIN country c ON c.legacy_source_id = a.payload::jsonb ->> 'country_id' " +
+            "WHERE a.source_table = 'ptcc_countries_map' AND a.last_seen_batch_id = ? " +
+            "AND (d.id IS NULL OR c.id IS NULL OR NOT EXISTS (SELECT 1 FROM rel_data_manager__ptcc_countries r " +
+            "WHERE r.data_manager_id = d.id AND r.country_id = c.id))"
+        );
+    }
+
+    private void reconcileRelationship(
+        UUID batchId,
+        List<MigrationReconciliationIssue> issues,
+        String sourceTable,
+        String missingSql
+    ) {
+        long missing = count(missingSql, batchId);
+        if (missing != 0) {
+            long sourceRows = count(
+                "SELECT COUNT(*) FROM legacy_record_archive WHERE source_table = ? AND last_seen_batch_id = ?",
+                sourceTable,
+                batchId
+            );
+            issues.add(
+                new MigrationReconciliationIssue(
+                    "OPERATIONAL_RELATIONSHIP",
+                    sourceTable,
+                    sourceRows,
+                    sourceRows - missing,
+                    "Every archived relationship must resolve to typed target rows"
+                )
+            );
+        }
     }
 
     private long count(String sql, Object... parameters) {

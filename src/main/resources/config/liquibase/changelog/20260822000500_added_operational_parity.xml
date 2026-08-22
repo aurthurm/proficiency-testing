@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260822000500-1" author="openai">
+        <createTable tableName="rel_data_manager__ptcc_countries">
+            <column name="data_manager_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="varchar(256)"/>
+            <column name="district" type="varchar(256)"/>
+            <column name="mapped_on" type="${datetimeType}"/>
+        </createTable>
+        <addPrimaryKey
+            tableName="rel_data_manager__ptcc_countries"
+            columnNames="data_manager_id,country_id"
+            constraintName="pk_data_manager_ptcc_countries"/>
+        <addForeignKeyConstraint
+            baseTableName="rel_data_manager__ptcc_countries"
+            baseColumnNames="data_manager_id"
+            referencedTableName="data_manager"
+            referencedColumnNames="id"
+            constraintName="fk_ptcc_country__data_manager"
+            onDelete="CASCADE"/>
+        <addForeignKeyConstraint
+            baseTableName="rel_data_manager__ptcc_countries"
+            baseColumnNames="country_id"
+            referencedTableName="country"
+            referencedColumnNames="id"
+            constraintName="fk_ptcc_country__country"
+            onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="20260822000500-2" author="openai">
+        <addColumn tableName="scheme_configuration">
+            <column name="legacy_source_id" type="varchar(255)"/>
+            <column name="legacy_payload" type="text"/>
+        </addColumn>
+        <addUniqueConstraint
+            tableName="scheme_configuration"
+            columnNames="legacy_source_id"
+            constraintName="ux_scheme_configuration__legacy_source_id"/>
+    </changeSet>
+</databaseChangeLog>

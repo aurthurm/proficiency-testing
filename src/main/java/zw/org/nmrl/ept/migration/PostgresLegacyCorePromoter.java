@@ -21,13 +21,20 @@ public class PostgresLegacyCorePromoter implements LegacyCorePromoter {
         "migration/promote/010_schemes.sql",
         "migration/promote/020_participants.sql",
         "migration/promote/030_data_managers.sql",
+        "migration/promote/031_data_manager_users.sql",
+        "migration/promote/032_system_admin_users.sql",
+        "migration/promote/033_participant_managers.sql",
+        "migration/promote/034_ptcc_countries.sql",
         "migration/promote/040_modes_of_receipt.sql",
         "migration/promote/041_not_tested_reasons.sql",
         "migration/promote/050_distributions.sql",
         "migration/promote/060_enrollments.sql",
         "migration/promote/070_shipments.sql",
         "migration/promote/080_shipment_participant_maps.sql",
-        "migration/promote/090_mail_templates.sql"
+        "migration/promote/090_mail_templates.sql",
+        "migration/promote/100_global_config.sql",
+        "migration/promote/101_system_config.sql",
+        "migration/promote/110_scheme_config.sql"
     );
 
     private final MigrationTarget migrationTarget;
