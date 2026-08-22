@@ -10,6 +10,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.Types;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import zw.org.nmrl.ept.config.ApplicationProperties;
 
@@ -52,7 +52,7 @@ public class LegacyBatchMigrationService {
         """;
 
     private final DataSource legacySource;
-    private final JdbcTemplate target;
+    private final MigrationTarget target;
     private final ObjectMapper objectMapper;
     private final ApplicationProperties.Migration properties;
     private final ObjectProvider<LegacyCorePromoter> corePromoter;
@@ -61,7 +61,7 @@ public class LegacyBatchMigrationService {
 
     public LegacyBatchMigrationService(
         @Qualifier("legacySourceDataSource") DataSource legacySource,
-        @Qualifier("dataSource") DataSource targetDataSource,
+        MigrationTarget target,
         ObjectMapper objectMapper,
         ApplicationProperties applicationProperties,
         ObjectProvider<LegacyCorePromoter> corePromoter,
@@ -69,7 +69,7 @@ public class LegacyBatchMigrationService {
         LegacyMigrationReconciliationService reconciliationService
     ) {
         this.legacySource = legacySource;
-        this.target = new JdbcTemplate(targetDataSource);
+        this.target = target;
         this.objectMapper = objectMapper;
         this.properties = applicationProperties.getMigration();
         this.corePromoter = corePromoter;
@@ -79,6 +79,12 @@ public class LegacyBatchMigrationService {
 
     public LegacyMigrationSummary migrate() throws Exception {
         validateSettings();
+        try (MigrationRunLock ignored = MigrationRunLock.acquire(target)) {
+            return migrateWithLock();
+        }
+    }
+
+    private LegacyMigrationSummary migrateWithLock() throws Exception {
         UUID batchId = UUID.randomUUID();
         String sourceVersion;
         String sourceDatabase;
@@ -87,13 +93,16 @@ public class LegacyBatchMigrationService {
         try (Connection source = legacySource.getConnection()) {
             sourceVersion = readSourceVersion(source);
             sourceDatabase = source.getCatalog();
-            tables = discoverTables(source);
+            List<String> availableTables = discoverAllTables(source);
+            validateSource(sourceVersion, availableTables);
+            tables = selectTables(availableTables);
         }
 
         startBatch(batchId, sourceVersion, sourceDatabase, tables.size());
         List<LegacyTableMigrationSummary> summaries = new ArrayList<>();
         long archivedRows = 0;
         long filesMigrated = 0;
+        long filesDiscovered = 0;
         long errors = 0;
 
         try {
@@ -123,6 +132,7 @@ public class LegacyBatchMigrationService {
                     throw new IllegalStateException("File migration was requested but no LegacyFileMigrationService is configured");
                 }
                 LegacyFileMigrationSummary fileSummary = fileMigrator.migrate(batchId);
+                filesDiscovered = fileSummary.discovered();
                 filesMigrated = fileSummary.copied() + fileSummary.unchanged();
                 errors += fileSummary.failed();
                 if (fileSummary.failed() > 0 && properties.isFailOnError()) {
@@ -130,7 +140,7 @@ public class LegacyBatchMigrationService {
                 }
             }
 
-            MigrationReconciliationReport reconciliation = reconciliationService.reconcile(batchId);
+            MigrationReconciliationReport reconciliation = reconciliationService.reconcile(batchId, tables.size(), filesDiscovered);
             errors += reconciliation.issues().size();
             if (!reconciliation.isClean() && properties.isFailOnError()) {
                 throw new IllegalStateException(reconciliation.issues().size() + " migration reconciliation checks failed");
@@ -158,7 +168,7 @@ public class LegacyBatchMigrationService {
         startTable(batchId, table, startedAt);
         try (Connection source = legacySource.getConnection()) {
             List<String> primaryKeys = primaryKeys(source, table);
-            String sql = selectSql(table, primaryKeys);
+            String sql = selectSql(table, primaryKeys, columns(source, table));
             long sourceRows = 0;
             long archivedRows = 0;
             BigInteger tableChecksum = BigInteger.ZERO;
@@ -250,26 +260,29 @@ public class LegacyBatchMigrationService {
             return 0;
         }
         int size = writeBatch.size();
-        target.batchUpdate(ARCHIVE_SQL, writeBatch);
+        target.write(() -> target.jdbc().batchUpdate(ARCHIVE_SQL, writeBatch));
         writeBatch.clear();
         return size;
     }
 
-    private List<String> discoverTables(Connection source) throws Exception {
-        Set<String> requested = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
-        properties.getIncludeTables().stream().map(String::trim).filter(value -> !value.isEmpty()).forEach(requested::add);
+    private List<String> discoverAllTables(Connection source) throws Exception {
         List<String> tables = new ArrayList<>();
         DatabaseMetaData metadata = source.getMetaData();
         try (ResultSet result = metadata.getTables(source.getCatalog(), null, "%", new String[] { "TABLE" })) {
             while (result.next()) {
                 String table = result.getString("TABLE_NAME");
                 requireSafeIdentifier(table);
-                if (requested.isEmpty() || requested.contains(table)) {
-                    tables.add(table);
-                }
+                tables.add(table);
             }
         }
         tables.sort(String.CASE_INSENSITIVE_ORDER);
+        return tables;
+    }
+
+    private List<String> selectTables(List<String> availableTables) {
+        Set<String> requested = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        properties.getIncludeTables().stream().map(String::trim).filter(value -> !value.isEmpty()).forEach(requested::add);
+        List<String> tables = availableTables.stream().filter(table -> requested.isEmpty() || requested.contains(table)).toList();
         if (!requested.isEmpty()) {
             Set<String> missing = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
             missing.addAll(requested);
@@ -291,9 +304,38 @@ public class LegacyBatchMigrationService {
         return ordered.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(Map.Entry::getValue).toList();
     }
 
-    private String selectSql(String table, List<String> primaryKeys) {
+    private List<LegacyColumn> columns(Connection source, String table) throws Exception {
+        Map<Integer, LegacyColumn> ordered = new LinkedHashMap<>();
+        try (ResultSet columns = source.getMetaData().getColumns(source.getCatalog(), null, table, "%")) {
+            while (columns.next()) {
+                String name = columns.getString("COLUMN_NAME");
+                requireSafeIdentifier(name);
+                ordered.put(columns.getInt("ORDINAL_POSITION"), new LegacyColumn(name, columns.getInt("DATA_TYPE")));
+            }
+        }
+        if (ordered.isEmpty()) {
+            throw new IllegalStateException("No columns were discovered for legacy table " + table);
+        }
+        return ordered.entrySet().stream().sorted(Map.Entry.comparingByKey()).map(Map.Entry::getValue).toList();
+    }
+
+    private String selectSql(String table, List<String> primaryKeys, List<LegacyColumn> columns) {
         requireSafeIdentifier(table);
-        StringBuilder sql = new StringBuilder("SELECT * FROM `").append(table).append('`');
+        StringBuilder sql = new StringBuilder("SELECT ");
+        for (int i = 0; i < columns.size(); i++) {
+            if (i > 0) {
+                sql.append(", ");
+            }
+            LegacyColumn column = columns.get(i);
+            if (isTemporal(column.jdbcType())) {
+                // Reading temporal columns as text preserves MySQL zero dates instead of
+                // allowing Connector/J to reject or silently coerce them.
+                sql.append("CAST(`").append(column.name()).append("` AS CHAR) AS `").append(column.name()).append('`');
+            } else {
+                sql.append('`').append(column.name()).append('`');
+            }
+        }
+        sql.append(" FROM `").append(table).append('`');
         if (!primaryKeys.isEmpty()) {
             sql.append(" ORDER BY ");
             for (int i = 0; i < primaryKeys.size(); i++) {
@@ -305,6 +347,13 @@ public class LegacyBatchMigrationService {
             }
         }
         return sql.toString();
+    }
+
+    private boolean isTemporal(int jdbcType) {
+        return switch (jdbcType) {
+            case Types.DATE, Types.TIME, Types.TIMESTAMP, Types.TIME_WITH_TIMEZONE, Types.TIMESTAMP_WITH_TIMEZONE -> true;
+            default -> false;
+        };
     }
 
     private String readSourceVersion(Connection source) {
@@ -324,6 +373,33 @@ public class LegacyBatchMigrationService {
         }
     }
 
+    private void validateSource(String sourceVersion, List<String> discoveredTables) {
+        List<String> supportedVersions = properties.getSupportedSourceVersions().stream()
+            .map(String::trim)
+            .filter(value -> !value.isEmpty())
+            .toList();
+        if (supportedVersions.isEmpty()) {
+            throw new IllegalArgumentException("At least one application.migration.supported-source-versions value is required");
+        }
+        if (!supportedVersions.contains(sourceVersion)) {
+            throw new IllegalStateException(
+                "Unsupported legacy ePT source version " + sourceVersion + "; supported versions: " + supportedVersions
+            );
+        }
+
+        Set<String> available = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        available.addAll(discoveredTables);
+        Set<String> missing = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        properties.getRequiredSourceTables().stream()
+            .map(String::trim)
+            .filter(value -> !value.isEmpty())
+            .filter(table -> !available.contains(table))
+            .forEach(missing::add);
+        if (!missing.isEmpty()) {
+            throw new IllegalStateException("Legacy source schema is missing required tables: " + missing);
+        }
+    }
+
     private void requireSafeIdentifier(String identifier) {
         if (identifier == null || !SAFE_IDENTIFIER.matcher(identifier).matches()) {
             throw new IllegalArgumentException("Unsafe database identifier: " + identifier);
@@ -336,18 +412,18 @@ public class LegacyBatchMigrationService {
     }
 
     private void startBatch(UUID id, String sourceVersion, String sourceDatabase, int tableCount) {
-        target.update(
+        target.write(() -> target.jdbc().update(
             "INSERT INTO migration_batch (id, source_version, source_database, status, started_at, tables_discovered) VALUES (?, ?, ?, 'RUNNING', ?, ?)",
             id,
             sourceVersion,
             sourceDatabase,
             Instant.now(),
             tableCount
-        );
+        ));
     }
 
     private void completeBatch(UUID id, String status, int tablesCompleted, long rowsArchived, long errors, String notes) {
-        target.update(
+        target.write(() -> target.jdbc().update(
             "UPDATE migration_batch SET status = ?, completed_at = ?, tables_completed = ?, rows_archived = ?, error_count = ?, notes = ? WHERE id = ?",
             status,
             Instant.now(),
@@ -356,20 +432,20 @@ public class LegacyBatchMigrationService {
             errors,
             notes,
             id
-        );
+        ));
     }
 
     private void startTable(UUID batchId, String table, Instant startedAt) {
-        target.update(
+        target.write(() -> target.jdbc().update(
             "INSERT INTO migration_table_result (batch_id, source_table, status, started_at) VALUES (?, ?, 'RUNNING', ?)",
             batchId,
             table,
             startedAt
-        );
+        ));
     }
 
     private void finishTable(UUID batchId, LegacyTableMigrationSummary summary) {
-        target.update(
+        target.write(() -> target.jdbc().update(
             "UPDATE migration_table_result SET status = ?, source_rows = ?, archived_rows = ?, stale_rows = ?, table_checksum = ?, completed_at = ?, error_message = ? WHERE batch_id = ? AND source_table = ?",
             summary.status(),
             summary.sourceRows(),
@@ -380,11 +456,11 @@ public class LegacyBatchMigrationService {
             summary.errorMessage(),
             batchId,
             summary.table()
-        );
+        ));
     }
 
     private long countStaleRows(String table, UUID batchId) {
-        Long value = target.queryForObject(
+        Long value = target.jdbc().queryForObject(
             "SELECT COUNT(*) FROM legacy_record_archive WHERE source_table = ? AND last_seen_batch_id <> ?",
             Long.class,
             table,
@@ -394,7 +470,7 @@ public class LegacyBatchMigrationService {
     }
 
     private void recordError(UUID batchId, String table, String sourcePrimaryKey, String stage, Exception error, String payload) {
-        target.update(
+        target.write(() -> target.jdbc().update(
             "INSERT INTO migration_error (batch_id, source_table, source_primary_key, stage, error_type, error_message, payload, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             batchId,
             table,
@@ -404,6 +480,8 @@ public class LegacyBatchMigrationService {
             error.getMessage() == null ? error.toString() : error.getMessage(),
             payload,
             Instant.now()
-        );
+        ));
     }
+
+    private record LegacyColumn(String name, int jdbcType) {}
 }

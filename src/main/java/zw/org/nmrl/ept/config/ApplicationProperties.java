@@ -54,6 +54,20 @@ public class ApplicationProperties {
         private boolean failOnError = true;
         private int batchSize = 500;
         private List<String> includeTables = new ArrayList<>();
+        private List<String> supportedSourceVersions = new ArrayList<>(List.of("7.6.20"));
+        private List<String> requiredSourceTables = new ArrayList<>(
+            List.of(
+                "system_config",
+                "countries",
+                "scheme_list",
+                "participant",
+                "data_manager",
+                "distributions",
+                "enrollments",
+                "shipment",
+                "shipment_participant_map"
+            )
+        );
         private final Source source = new Source();
         private final Files files = new Files();
 
@@ -95,6 +109,22 @@ public class ApplicationProperties {
 
         public void setIncludeTables(List<String> includeTables) {
             this.includeTables = includeTables == null ? new ArrayList<>() : new ArrayList<>(includeTables);
+        }
+
+        public List<String> getSupportedSourceVersions() {
+            return supportedSourceVersions;
+        }
+
+        public void setSupportedSourceVersions(List<String> supportedSourceVersions) {
+            this.supportedSourceVersions = supportedSourceVersions == null ? new ArrayList<>() : new ArrayList<>(supportedSourceVersions);
+        }
+
+        public List<String> getRequiredSourceTables() {
+            return requiredSourceTables;
+        }
+
+        public void setRequiredSourceTables(List<String> requiredSourceTables) {
+            this.requiredSourceTables = requiredSourceTables == null ? new ArrayList<>() : new ArrayList<>(requiredSourceTables);
         }
 
         public Source getSource() {

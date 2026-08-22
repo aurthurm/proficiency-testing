@@ -248,6 +248,8 @@ application:
     fail-on-error: ${EPT_MIGRATION_FAIL_ON_ERROR:true}
     batch-size: ${EPT_MIGRATION_BATCH_SIZE:500}
     include-tables: ${EPT_MIGRATION_INCLUDE_TABLES:}
+    supported-source-versions: ${EPT_MIGRATION_SUPPORTED_SOURCE_VERSIONS:7.6.20}
+    required-source-tables: ${EPT_MIGRATION_REQUIRED_SOURCE_TABLES:system_config,countries,scheme_list,participant,data_manager,distributions,enrollments,shipment,shipment_participant_map}
     source:
       url: ${EPT_LEGACY_JDBC_URL:}
       username: ${EPT_LEGACY_DB_USER:}

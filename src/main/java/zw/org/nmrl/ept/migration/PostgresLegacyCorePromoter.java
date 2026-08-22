@@ -4,15 +4,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @ConditionalOnProperty(prefix = "application.migration", name = "enabled", havingValue = "true")
@@ -33,25 +30,28 @@ public class PostgresLegacyCorePromoter implements LegacyCorePromoter {
         "migration/promote/090_mail_templates.sql"
     );
 
+    private final MigrationTarget migrationTarget;
     private final NamedParameterJdbcTemplate target;
 
-    public PostgresLegacyCorePromoter(@Qualifier("dataSource") DataSource targetDataSource) {
-        this.target = new NamedParameterJdbcTemplate(targetDataSource);
+    public PostgresLegacyCorePromoter(MigrationTarget migrationTarget) {
+        this.migrationTarget = migrationTarget;
+        this.target = new NamedParameterJdbcTemplate(migrationTarget.jdbc());
     }
 
     @Override
-    @Transactional
     public void promote(UUID batchId) {
-        Map<String, Object> parameters = Map.of("batchId", batchId);
-        for (String path : PROMOTION_SCRIPTS) {
-            try {
-                ClassPathResource resource = new ClassPathResource(path);
-                String sql = resource.getContentAsString(StandardCharsets.UTF_8);
-                int mappings = target.update(sql, parameters);
-                LOG.info("Applied legacy promotion {} and recorded {} identity mappings", path, mappings);
-            } catch (Exception e) {
-                throw new IllegalStateException("Failed to apply legacy promotion script " + path, e);
+        migrationTarget.write(() -> {
+            Map<String, Object> parameters = Map.of("batchId", batchId);
+            for (String path : PROMOTION_SCRIPTS) {
+                try {
+                    ClassPathResource resource = new ClassPathResource(path);
+                    String sql = resource.getContentAsString(StandardCharsets.UTF_8);
+                    int mappings = target.update(sql, parameters);
+                    LOG.info("Applied legacy promotion {} and recorded {} identity mappings", path, mappings);
+                } catch (Exception e) {
+                    throw new IllegalStateException("Failed to apply legacy promotion script " + path, e);
+                }
             }
-        }
+        });
     }
 }

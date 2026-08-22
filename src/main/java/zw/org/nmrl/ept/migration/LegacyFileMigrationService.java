@@ -13,12 +13,9 @@ import java.util.HexFormat;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
-import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import zw.org.nmrl.ept.config.ApplicationProperties;
 
@@ -28,14 +25,14 @@ public class LegacyFileMigrationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(LegacyFileMigrationService.class);
 
-    private final JdbcTemplate target;
+    private final MigrationTarget target;
     private final ApplicationProperties.Migration.Files properties;
 
     public LegacyFileMigrationService(
-        @Qualifier("dataSource") DataSource targetDataSource,
+        MigrationTarget target,
         ApplicationProperties applicationProperties
     ) {
-        this.target = new JdbcTemplate(targetDataSource);
+        this.target = target;
         this.properties = applicationProperties.getMigration().getFiles();
     }
 
@@ -52,7 +49,10 @@ public class LegacyFileMigrationService {
 
         List<Path> files;
         try (Stream<Path> paths = Files.walk(sourceRoot)) {
-            files = paths.filter(path -> Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS)).sorted().toList();
+            files = paths
+                .filter(path -> Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS) || Files.isSymbolicLink(path))
+                .sorted()
+                .toList();
         }
 
         long copied = 0;
@@ -61,7 +61,9 @@ public class LegacyFileMigrationService {
         for (Path source : files) {
             String relativePath = portablePath(sourceRoot.relativize(source));
             try {
-                String status = migrateFile(sourceRoot, targetRoot, source);
+                String status = Files.isSymbolicLink(source)
+                    ? migrateSymbolicLink(sourceRoot, targetRoot, source)
+                    : migrateFile(sourceRoot, targetRoot, source);
                 if ("COPIED".equals(status)) {
                     copied++;
                 } else {
@@ -113,12 +115,30 @@ public class LegacyFileMigrationService {
         return "COPIED";
     }
 
+    private String migrateSymbolicLink(Path sourceRoot, Path targetRoot, Path source) throws Exception {
+        Path target = targetRoot.resolve(sourceRoot.relativize(source)).normalize();
+        if (!target.startsWith(targetRoot)) {
+            throw new IllegalArgumentException("Legacy symbolic-link path escapes the configured target root: " + source);
+        }
+        Path linkValue = Files.readSymbolicLink(source);
+        Files.createDirectories(target.getParent());
+        if (Files.isSymbolicLink(target) && linkValue.equals(Files.readSymbolicLink(target))) {
+            return "UNCHANGED";
+        }
+        if (Files.exists(target, LinkOption.NOFOLLOW_LINKS) && !properties.isOverwrite()) {
+            throw new IllegalStateException("Target differs and overwrite is disabled: " + target);
+        }
+        Files.deleteIfExists(target);
+        Files.createSymbolicLink(target, linkValue);
+        return "COPIED";
+    }
+
     private void record(UUID batchId, String relativePath, Path source, Path migratedTarget, String status, String error) {
         Long sourceSize = sizeOrNull(source);
         Long targetSize = sizeOrNull(migratedTarget);
         String sourceChecksum = checksumOrNull(source);
         String targetChecksum = checksumOrNull(migratedTarget);
-        target.update(
+        target.write(() -> target.jdbc().update(
             "INSERT INTO migration_file_result " +
             "(batch_id, relative_path, status, source_size, target_size, source_checksum, target_checksum, error_message, migrated_at) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -131,7 +151,7 @@ public class LegacyFileMigrationService {
             targetChecksum,
             error,
             Instant.now()
-        );
+        ));
     }
 
     private Path requiredRoot(String value, String environmentVariable) {
@@ -147,7 +167,13 @@ public class LegacyFileMigrationService {
 
     private Long sizeOrNull(Path path) {
         try {
-            return path == null || !Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS) ? null : Files.size(path);
+            if (path == null) {
+                return null;
+            }
+            if (Files.isSymbolicLink(path)) {
+                return (long) Files.readSymbolicLink(path).toString().getBytes(java.nio.charset.StandardCharsets.UTF_8).length;
+            }
+            return !Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS) ? null : Files.size(path);
         } catch (Exception ignored) {
             return null;
         }
@@ -155,7 +181,13 @@ public class LegacyFileMigrationService {
 
     private String checksumOrNull(Path path) {
         try {
-            return path == null || !Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS) ? null : sha256(path);
+            if (path == null) {
+                return null;
+            }
+            if (Files.isSymbolicLink(path)) {
+                return sha256(Files.readSymbolicLink(path).toString());
+            }
+            return !Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS) ? null : sha256(path);
         } catch (Exception ignored) {
             return null;
         }
@@ -167,6 +199,11 @@ public class LegacyFileMigrationService {
             digestInput.transferTo(OutputStreamSink.INSTANCE);
         }
         return HexFormat.of().formatHex(digest.digest());
+    }
+
+    private String sha256(String value) throws Exception {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        return HexFormat.of().formatHex(digest.digest(value.getBytes(java.nio.charset.StandardCharsets.UTF_8)));
     }
 
     private static final class OutputStreamSink extends java.io.OutputStream {
