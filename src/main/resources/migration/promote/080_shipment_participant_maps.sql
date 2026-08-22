@@ -20,8 +20,10 @@ WITH promoted AS (
             WHEN 'noresponse' THEN 'NO_RESPONSE'
             ELSE 'NOT_STARTED'
         END,
-        NULLIF(r.payload::jsonb ->> 'shipment_receipt_date', '')::date,
-        NULLIF(r.payload::jsonb ->> 'shipment_test_date', '')::date,
+        CASE WHEN COALESCE(r.payload::jsonb ->> 'shipment_receipt_date', '') ~ '^[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}$'
+            THEN (r.payload::jsonb ->> 'shipment_receipt_date')::date END,
+        CASE WHEN COALESCE(r.payload::jsonb ->> 'shipment_test_date', '') ~ '^[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}$'
+            THEN (r.payload::jsonb ->> 'shipment_test_date')::date END,
         CASE WHEN COALESCE(r.payload::jsonb ->> 'shipment_test_report_date', '') ~ '^[1-9][0-9]{3}-' THEN (r.payload::jsonb ->> 'shipment_test_report_date')::timestamp END,
         lower(COALESCE(r.payload::jsonb ->> 'is_excluded', 'no')) IN ('yes', '1', 'true', 'on'),
         lower(COALESCE(r.payload::jsonb ->> 'is_response_late', 'no')) IN ('yes', '1', 'true', 'on'),
@@ -32,13 +34,20 @@ WITH promoted AS (
         r.payload::jsonb ->> 'user_comment',
         NULLIF(r.payload::jsonb ->> 'shipment_score', '')::double precision,
         NULLIF(r.payload::jsonb ->> 'documentation_score', '')::double precision,
-        'NOT_EVALUATED',
+        CASE COALESCE(NULLIF(r.payload::jsonb ->> 'final_result', ''), '0')
+            WHEN '1' THEN 'PASS'
+            WHEN '2' THEN 'FAIL'
+            WHEN '3' THEN 'EXCLUDED'
+            WHEN '4' THEN 'NOT_EVALUATED'
+            ELSE 'NOT_EVALUATED'
+        END,
         r.payload::jsonb ->> 'failure_reason',
-        r.payload::jsonb ->> 'evaluation_comment',
+        r.payload::jsonb ->> 'optional_eval_comment',
         lower(COALESCE(r.payload::jsonb ->> 'is_followup', 'no')) IN ('yes', '1', 'true', 'on'),
         lower(COALESCE(r.payload::jsonb ->> 'manual_override', 'no')) IN ('yes', '1', 'true', 'on'),
         CASE WHEN lower(COALESCE(r.payload::jsonb ->> 'qc_done', 'no')) IN ('yes', '1', 'true', 'on') THEN 'PASSED' ELSE 'PENDING' END,
-        NULLIF(r.payload::jsonb ->> 'qc_date', '')::date,
+        CASE WHEN COALESCE(r.payload::jsonb ->> 'qc_date', '') ~ '^[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}$'
+            THEN (r.payload::jsonb ->> 'qc_date')::date END,
         r.payload::jsonb ->> 'qc_done_by',
         lower(COALESCE(r.payload::jsonb ->> 'synced', 'no')) IN ('yes', '1', 'true', 'on'),
         CASE WHEN COALESCE(r.payload::jsonb ->> 'synced_on', '') ~ '^[1-9][0-9]{3}-' THEN (r.payload::jsonb ->> 'synced_on')::timestamp END,
@@ -68,6 +77,7 @@ WITH promoted AS (
         user_comment = EXCLUDED.user_comment,
         shipment_score = EXCLUDED.shipment_score,
         documentation_score = EXCLUDED.documentation_score,
+        final_result = EXCLUDED.final_result,
         failure_reason = EXCLUDED.failure_reason,
         evaluation_comment = EXCLUDED.evaluation_comment,
         is_followup = EXCLUDED.is_followup,

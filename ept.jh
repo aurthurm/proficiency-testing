@@ -97,7 +97,7 @@ enum CustomFieldType { TEXT, NUMBER, DATE, BOOLEAN, SELECT }
 entity DataManager {
   firstName String
   lastName String
-  institute String
+  institute String maxlength(500)
   primaryEmail String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
   secondaryEmail String pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
   phone String
@@ -119,8 +119,8 @@ entity Participant {
   departmentName String
   email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
   additionalEmail String pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
-  address String
-  shippingAddress String
+  address String maxlength(500)
+  shippingAddress String maxlength(1000)
   city String
   state String
   district String
@@ -256,15 +256,15 @@ entity ShipmentParticipantMap {
   isExcluded Boolean
   isResponseLate Boolean
   isPtTestNotPerformed Boolean
-  ptTestNotPerformedComments String
+  ptTestNotPerformedComments TextBlob
   supervisorApproved Boolean
   participantSupervisor String
-  userComment String
+  userComment TextBlob
   shipmentScore Double
   documentationScore Double
   finalResult FinalResult
   failureReason TextBlob
-  evaluationComment String
+  evaluationComment TextBlob
   isFollowup Boolean
   manualOverride Boolean
   qcStatus QcStatus

@@ -61,6 +61,7 @@ public class ShipmentParticipantMap extends LegacyCompatibleEntity implements Se
     @Column(name = "is_pt_test_not_performed")
     private Boolean isPtTestNotPerformed;
 
+    @Lob
     @Column(name = "pt_test_not_performed_comments")
     private String ptTestNotPerformedComments;
 
@@ -70,6 +71,7 @@ public class ShipmentParticipantMap extends LegacyCompatibleEntity implements Se
     @Column(name = "participant_supervisor")
     private String participantSupervisor;
 
+    @Lob
     @Column(name = "user_comment")
     private String userComment;
 
@@ -87,6 +89,7 @@ public class ShipmentParticipantMap extends LegacyCompatibleEntity implements Se
     @Column(name = "failure_reason")
     private String failureReason;
 
+    @Lob
     @Column(name = "evaluation_comment")
     private String evaluationComment;
 

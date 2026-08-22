@@ -8,10 +8,19 @@ WITH promoted AS (
     SELECT
         nextval('sequence_generator'),
         r.payload::jsonb ->> 'shipment_code',
-        COALESCE(NULLIF(r.payload::jsonb ->> 'shipment_date', '')::date, d.distribution_date),
         COALESCE(
-            NULLIF(r.payload::jsonb ->> 'response_deadline', '')::timestamp,
-            COALESCE(NULLIF(r.payload::jsonb ->> 'shipment_date', '')::date, d.distribution_date)::timestamp + interval '30 days'
+            CASE WHEN COALESCE(r.payload::jsonb ->> 'shipment_date', '') ~ '^[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}$'
+                THEN (r.payload::jsonb ->> 'shipment_date')::date END,
+            d.distribution_date
+        ),
+        COALESCE(
+            CASE WHEN COALESCE(r.payload::jsonb ->> 'response_deadline', '') ~ '^[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}'
+                THEN (r.payload::jsonb ->> 'response_deadline')::timestamp END,
+            COALESCE(
+                CASE WHEN COALESCE(r.payload::jsonb ->> 'shipment_date', '') ~ '^[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}$'
+                    THEN (r.payload::jsonb ->> 'shipment_date')::date END,
+                d.distribution_date
+            )::timestamp + interval '30 days'
         ),
         lower(COALESCE(r.payload::jsonb ->> 'response_switch', 'off')) IN ('on', 'yes', '1', 'true'),
         lower(COALESCE(r.payload::jsonb ->> 'auto_close_at_deadline', 'yes')) IN ('on', 'yes', '1', 'true'),

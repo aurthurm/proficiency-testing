@@ -59,6 +59,7 @@
     <include file="config/liquibase/changelog/20260822000100_added_legacy_migration_support.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260822000200_added_core_legacy_identity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260822000300_added_legacy_file_migration.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260822000400_corrected_legacy_field_widths.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20260602205801_added_entity_constraints_DataManager.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20260602205802_added_entity_constraints_Participant.xml" relativeToChangelogFile="false"/>
