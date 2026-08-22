@@ -49,10 +49,10 @@ public class Participant extends LegacyCompatibleEntity implements Serializable 
     @Column(name = "additional_email")
     private String additionalEmail;
 
-    @Column(name = "address")
+    @Column(name = "address", length = 500)
     private String address;
 
-    @Column(name = "shipping_address")
+    @Column(name = "shipping_address", length = 1000)
     private String shippingAddress;
 
     @Column(name = "city")

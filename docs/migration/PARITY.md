@@ -28,18 +28,19 @@ flowchart TD
 | Dates/times | Preserve source wall-clock text in the archive; parse only valid typed values during promotion |
 | Binary columns | Base64 in the archive |
 | Deletes between snapshots | Report as `stale_rows`; do not silently delete target history |
-| Authentication | Preserve legacy hashes/tokens for audit and controlled transition; do not automatically activate them |
-| Scheme results | Preserve losslessly first; implement per-scheme typed mappings with fixture-based tests later |
+| Authentication | Create JHipster users; activate only active, unbanned accounts with compatible bcrypt hashes; force reset otherwise |
+| Scheme results | Preserve every configured response/reference row in a typed `LegacySchemeResult` envelope without lossy flattening |
+| Files | Preserve regular files and symbolic links with checksums; serve portable references through `LegacyFileStore` |
 | UI | Out of scope for this migration layer |
 
 ## Follow-up domain slices
 
 Each follow-up can be reviewed independently:
 
-1. Add the typed Liquibase schema and Java domain for one legacy table family.
+1. Add the scheme-specific Java domain for one `LegacySchemeResult` family.
 2. Add a promotion SQL file keyed by `legacy_source_id`.
 3. Register its source/target pair in `LegacyMigrationReconciliationService`.
 4. Test the mapper against an anonymized source fixture, including nulls, invalid legacy dates, and relationship gaps.
-5. Confirm source archive count equals identity-map count before enabling the domain in production.
+5. Confirm source envelope count equals the new identity-map count before enabling the domain in production.
 
 This pattern avoids a second risky big-bang rewrite while maintaining an auditable path to full typed parity.

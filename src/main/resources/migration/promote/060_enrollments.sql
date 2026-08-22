@@ -7,7 +7,11 @@ WITH promoted AS (
             WHEN 'withdrawn' THEN 'WITHDRAWN'
             ELSE 'ENROLLED'
         END,
-        COALESCE((NULLIF(substring(e.payload::jsonb ->> 'enrolled_on' from 1 for 10), ''))::date, CURRENT_DATE),
+        COALESCE(
+            CASE WHEN substring(COALESCE(e.payload::jsonb ->> 'enrolled_on', '') from 1 for 10) ~ '^[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}$'
+                THEN substring(e.payload::jsonb ->> 'enrolled_on' from 1 for 10)::date END,
+            CURRENT_DATE
+        ),
         NULL,
         p.id,
         s.id,

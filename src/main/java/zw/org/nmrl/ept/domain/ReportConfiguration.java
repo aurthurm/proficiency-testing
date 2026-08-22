@@ -14,7 +14,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "report_configuration")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class ReportConfiguration implements Serializable {
+public class ReportConfiguration extends LegacyCompatibleEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -25,6 +25,7 @@ public class ReportConfiguration implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @Lob
     @Column(name = "report_header")
     private String reportHeader;
 

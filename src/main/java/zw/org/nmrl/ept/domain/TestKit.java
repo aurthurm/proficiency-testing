@@ -16,7 +16,7 @@ import zw.org.nmrl.ept.domain.enumeration.Status;
 @Table(name = "test_kit")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class TestKit implements Serializable {
+public class TestKit extends LegacyCompatibleEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

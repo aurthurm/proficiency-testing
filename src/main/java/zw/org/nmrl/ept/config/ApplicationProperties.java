@@ -17,6 +17,8 @@ public class ApplicationProperties {
 
     private final Migration migration = new Migration();
 
+    private final LegacyFiles legacyFiles = new LegacyFiles();
+
     // jhipster-needle-application-properties-property
 
     public Liquibase getLiquibase() {
@@ -25,6 +27,10 @@ public class ApplicationProperties {
 
     public Migration getMigration() {
         return migration;
+    }
+
+    public LegacyFiles getLegacyFiles() {
+        return legacyFiles;
     }
 
     // jhipster-needle-application-properties-property-getter
@@ -54,6 +60,25 @@ public class ApplicationProperties {
         private boolean failOnError = true;
         private int batchSize = 500;
         private List<String> includeTables = new ArrayList<>();
+        private List<String> supportedSourceVersions = new ArrayList<>(List.of("7.6.20"));
+        private List<String> requiredSourceTables = new ArrayList<>(
+            List.of(
+                "system_config",
+                "countries",
+                "scheme_list",
+                "participant",
+                "data_manager",
+                "system_admin",
+                "participant_manager_map",
+                "ptcc_countries_map",
+                "global_config",
+                "scheme_config",
+                "distributions",
+                "enrollments",
+                "shipment",
+                "shipment_participant_map"
+            )
+        );
         private final Source source = new Source();
         private final Files files = new Files();
 
@@ -95,6 +120,22 @@ public class ApplicationProperties {
 
         public void setIncludeTables(List<String> includeTables) {
             this.includeTables = includeTables == null ? new ArrayList<>() : new ArrayList<>(includeTables);
+        }
+
+        public List<String> getSupportedSourceVersions() {
+            return supportedSourceVersions;
+        }
+
+        public void setSupportedSourceVersions(List<String> supportedSourceVersions) {
+            this.supportedSourceVersions = supportedSourceVersions == null ? new ArrayList<>() : new ArrayList<>(supportedSourceVersions);
+        }
+
+        public List<String> getRequiredSourceTables() {
+            return requiredSourceTables;
+        }
+
+        public void setRequiredSourceTables(List<String> requiredSourceTables) {
+            this.requiredSourceTables = requiredSourceTables == null ? new ArrayList<>() : new ArrayList<>(requiredSourceTables);
         }
 
         public Source getSource() {
@@ -183,6 +224,29 @@ public class ApplicationProperties {
             public void setOverwrite(boolean overwrite) {
                 this.overwrite = overwrite;
             }
+        }
+    }
+
+    /** Read-only access to checksum-verified files after cutover. */
+    public static class LegacyFiles {
+
+        private boolean enabled;
+        private String root;
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public String getRoot() {
+            return root;
+        }
+
+        public void setRoot(String root) {
+            this.root = root;
         }
     }
 

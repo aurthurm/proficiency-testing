@@ -37,7 +37,7 @@ public class DataManager extends LegacyCompatibleEntity implements Serializable 
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "institute")
+    @Column(name = "institute", length = 500)
     private String institute;
 
     @NotNull

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260822000400-1" author="openai">
+        <modifyDataType tableName="participant" columnName="address" newDataType="varchar(500)"/>
+        <modifyDataType tableName="participant" columnName="shipping_address" newDataType="varchar(1000)"/>
+        <modifyDataType tableName="data_manager" columnName="institute" newDataType="varchar(500)"/>
+        <modifyDataType tableName="shipment_participant_map" columnName="pt_test_not_performed_comments" newDataType="${clobType}"/>
+        <modifyDataType tableName="shipment_participant_map" columnName="user_comment" newDataType="${clobType}"/>
+        <modifyDataType tableName="shipment_participant_map" columnName="evaluation_comment" newDataType="${clobType}"/>
+    </changeSet>
+</databaseChangeLog>

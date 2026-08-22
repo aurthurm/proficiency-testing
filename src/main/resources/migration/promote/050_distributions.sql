@@ -3,7 +3,8 @@ WITH promoted AS (
     SELECT
         nextval('sequence_generator'),
         r.payload::jsonb ->> 'distribution_code',
-        (r.payload::jsonb ->> 'distribution_date')::date,
+        CASE WHEN COALESCE(r.payload::jsonb ->> 'distribution_date', '') ~ '^[1-9][0-9]{3}-[0-9]{2}-[0-9]{2}$'
+            THEN (r.payload::jsonb ->> 'distribution_date')::date END,
         CASE lower(COALESCE(r.payload::jsonb ->> 'status', 'draft'))
             WHEN 'open' THEN 'OPEN'
             WHEN 'shipped' THEN 'SHIPPED'

@@ -1,7 +1,6 @@
 package zw.org.nmrl.ept.domain;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Lob;
 import jakarta.persistence.MappedSuperclass;
 import java.io.Serializable;
 
@@ -17,8 +16,7 @@ public abstract class LegacyCompatibleEntity implements Serializable {
     @Column(name = "legacy_source_id", length = 255, unique = true)
     private String legacySourceId;
 
-    @Lob
-    @Column(name = "legacy_payload")
+    @Column(name = "legacy_payload", columnDefinition = "text")
     private String legacyPayload;
 
     public String getLegacySourceId() {

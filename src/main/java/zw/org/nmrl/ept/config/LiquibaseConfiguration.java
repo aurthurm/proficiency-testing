@@ -39,7 +39,9 @@ public class LiquibaseConfiguration {
         DataSourceProperties dataSourceProperties
     ) {
         SpringLiquibase liquibase;
-        if (Boolean.TRUE.equals(applicationProperties.getLiquibase().getAsyncStart())) {
+        boolean asyncStart = Boolean.TRUE.equals(applicationProperties.getLiquibase().getAsyncStart()) &&
+            !applicationProperties.getMigration().isEnabled();
+        if (asyncStart) {
             liquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(
                 this.env,
                 executor,

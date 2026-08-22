@@ -16,7 +16,7 @@ import zw.org.nmrl.ept.domain.enumeration.CertificateType;
 @Table(name = "certificate_template")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class CertificateTemplate implements Serializable {
+public class CertificateTemplate extends LegacyCompatibleEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -32,7 +32,7 @@ public class CertificateTemplate implements Serializable {
     @Column(name = "certificate_type", nullable = false)
     private CertificateType certificateType;
 
-    @Column(name = "file_ref")
+    @Column(name = "file_ref", length = 500)
     private String fileRef;
 
     @Lob
