@@ -18,7 +18,7 @@ import zw.org.nmrl.ept.domain.enumeration.Status;
 @Table(name = "participant")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Participant implements Serializable {
+public class Participant extends LegacyCompatibleEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

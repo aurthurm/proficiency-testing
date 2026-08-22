@@ -19,7 +19,7 @@ import zw.org.nmrl.ept.domain.enumeration.DistributionStatus;
 @Table(name = "distribution")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Distribution implements Serializable {
+public class Distribution extends LegacyCompatibleEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

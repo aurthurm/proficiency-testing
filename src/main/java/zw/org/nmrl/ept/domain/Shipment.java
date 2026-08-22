@@ -20,7 +20,7 @@ import zw.org.nmrl.ept.domain.enumeration.ShipmentStatus;
 @Table(name = "shipment")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Shipment implements Serializable {
+public class Shipment extends LegacyCompatibleEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

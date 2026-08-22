@@ -15,7 +15,7 @@ import zw.org.nmrl.ept.domain.enumeration.Status;
 @Table(name = "mode_of_receipt")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class ModeOfReceipt implements Serializable {
+public class ModeOfReceipt extends LegacyCompatibleEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

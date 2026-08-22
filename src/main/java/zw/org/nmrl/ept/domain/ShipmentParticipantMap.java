@@ -22,7 +22,7 @@ import zw.org.nmrl.ept.domain.enumeration.ResponseStatus;
 @Table(name = "shipment_participant_map")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class ShipmentParticipantMap implements Serializable {
+public class ShipmentParticipantMap extends LegacyCompatibleEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
