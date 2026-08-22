@@ -55,6 +55,7 @@ public class ApplicationProperties {
         private int batchSize = 500;
         private List<String> includeTables = new ArrayList<>();
         private final Source source = new Source();
+        private final Files files = new Files();
 
         public boolean isEnabled() {
             return enabled;
@@ -100,6 +101,10 @@ public class ApplicationProperties {
             return source;
         }
 
+        public Files getFiles() {
+            return files;
+        }
+
         public static class Source {
 
             private String url;
@@ -137,6 +142,46 @@ public class ApplicationProperties {
 
             public void setDriverClassName(String driverClassName) {
                 this.driverClassName = driverClassName;
+            }
+        }
+
+        public static class Files {
+
+            private boolean enabled;
+            private String sourceRoot;
+            private String targetRoot;
+            private boolean overwrite;
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public String getSourceRoot() {
+                return sourceRoot;
+            }
+
+            public void setSourceRoot(String sourceRoot) {
+                this.sourceRoot = sourceRoot;
+            }
+
+            public String getTargetRoot() {
+                return targetRoot;
+            }
+
+            public void setTargetRoot(String targetRoot) {
+                this.targetRoot = targetRoot;
+            }
+
+            public boolean isOverwrite() {
+                return overwrite;
+            }
+
+            public void setOverwrite(boolean overwrite) {
+                this.overwrite = overwrite;
             }
         }
     }

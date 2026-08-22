@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260822000300-1" author="openai">
+        <createTable tableName="migration_file_result">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="batch_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="relative_path" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="source_size" type="bigint"/>
+            <column name="target_size" type="bigint"/>
+            <column name="source_checksum" type="varchar(64)"/>
+            <column name="target_checksum" type="varchar(64)"/>
+            <column name="error_message" type="text"/>
+            <column name="migrated_at" type="${datetimeType}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint
+            tableName="migration_file_result"
+            columnNames="batch_id, relative_path"
+            constraintName="ux_migration_file_result__batch_path"/>
+        <addForeignKeyConstraint
+            baseTableName="migration_file_result"
+            baseColumnNames="batch_id"
+            referencedTableName="migration_batch"
+            referencedColumnNames="id"
+            constraintName="fk_migration_file_result__batch_id"
+            onDelete="CASCADE"/>
+        <createIndex tableName="migration_file_result" indexName="ix_migration_file_result__status">
+            <column name="batch_id"/>
+            <column name="status"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

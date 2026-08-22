@@ -253,3 +253,8 @@ application:
       username: ${EPT_LEGACY_DB_USER:}
       password: ${EPT_LEGACY_DB_PASSWORD:}
       driver-class-name: com.mysql.cj.jdbc.Driver
+    files:
+      enabled: ${EPT_MIGRATION_FILES_ENABLED:false}
+      source-root: ${EPT_LEGACY_FILES_ROOT:}
+      target-root: ${EPT_TARGET_FILES_ROOT:}
+      overwrite: ${EPT_MIGRATION_FILES_OVERWRITE:false}

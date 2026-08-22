@@ -22,10 +22,11 @@ public class LegacyMigrationRunner implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         LegacyMigrationSummary summary = migrationService.migrate();
         LOG.info(
-            "Legacy ePT migration {} completed: {} tables and {} rows archived with {} errors",
+            "Legacy ePT migration {} completed: {} tables, {} rows archived and {} files verified with {} errors",
             summary.batchId(),
             summary.tablesCompleted(),
             summary.rowsArchived(),
+            summary.filesMigrated(),
             summary.errorCount()
         );
     }

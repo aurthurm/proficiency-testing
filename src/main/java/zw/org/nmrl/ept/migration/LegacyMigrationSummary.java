@@ -9,6 +9,7 @@ public record LegacyMigrationSummary(
     int tablesDiscovered,
     int tablesCompleted,
     long rowsArchived,
+    long filesMigrated,
     long errorCount,
     List<LegacyTableMigrationSummary> tables
 ) {}

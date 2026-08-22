@@ -53,19 +53,22 @@ public class LegacyBatchMigrationService {
     private final ObjectMapper objectMapper;
     private final ApplicationProperties.Migration properties;
     private final ObjectProvider<LegacyCorePromoter> corePromoter;
+    private final ObjectProvider<LegacyFileMigrationService> fileMigrationService;
 
     public LegacyBatchMigrationService(
         @Qualifier("legacySourceDataSource") DataSource legacySource,
         @Qualifier("dataSource") DataSource targetDataSource,
         ObjectMapper objectMapper,
         ApplicationProperties applicationProperties,
-        ObjectProvider<LegacyCorePromoter> corePromoter
+        ObjectProvider<LegacyCorePromoter> corePromoter,
+        ObjectProvider<LegacyFileMigrationService> fileMigrationService
     ) {
         this.legacySource = legacySource;
         this.target = new JdbcTemplate(targetDataSource);
         this.objectMapper = objectMapper;
         this.properties = applicationProperties.getMigration();
         this.corePromoter = corePromoter;
+        this.fileMigrationService = fileMigrationService;
     }
 
     public LegacyMigrationSummary migrate() throws Exception {
@@ -84,6 +87,7 @@ public class LegacyBatchMigrationService {
         startBatch(batchId, sourceVersion, sourceDatabase, tables.size());
         List<LegacyTableMigrationSummary> summaries = new ArrayList<>();
         long archivedRows = 0;
+        long filesMigrated = 0;
         long errors = 0;
 
         try {
@@ -107,6 +111,19 @@ public class LegacyBatchMigrationService {
                 promoter.promote(batchId);
             }
 
+            if (properties.getFiles().isEnabled()) {
+                LegacyFileMigrationService fileMigrator = fileMigrationService.getIfAvailable();
+                if (fileMigrator == null) {
+                    throw new IllegalStateException("File migration was requested but no LegacyFileMigrationService is configured");
+                }
+                LegacyFileMigrationSummary fileSummary = fileMigrator.migrate(batchId);
+                filesMigrated = fileSummary.copied() + fileSummary.unchanged();
+                errors += fileSummary.failed();
+                if (fileSummary.failed() > 0 && properties.isFailOnError()) {
+                    throw new IllegalStateException(fileSummary.failed() + " legacy files failed checksum-verified migration");
+                }
+            }
+
             completeBatch(batchId, "COMPLETED", summaries.size(), archivedRows, errors, null);
             return new LegacyMigrationSummary(
                 batchId,
@@ -114,6 +131,7 @@ public class LegacyBatchMigrationService {
                 tables.size(),
                 summaries.size(),
                 archivedRows,
+                filesMigrated,
                 errors,
                 List.copyOf(summaries)
             );
