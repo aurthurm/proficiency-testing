@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HexFormat;
 import java.util.List;
@@ -28,10 +29,7 @@ public class LegacyFileMigrationService {
     private final MigrationTarget target;
     private final ApplicationProperties.Migration.Files properties;
 
-    public LegacyFileMigrationService(
-        MigrationTarget target,
-        ApplicationProperties applicationProperties
-    ) {
+    public LegacyFileMigrationService(MigrationTarget target, ApplicationProperties applicationProperties) {
         this.target = target;
         this.properties = applicationProperties.getMigration().getFiles();
     }
@@ -138,20 +136,24 @@ public class LegacyFileMigrationService {
         Long targetSize = sizeOrNull(migratedTarget);
         String sourceChecksum = checksumOrNull(source);
         String targetChecksum = checksumOrNull(migratedTarget);
-        target.write(() -> target.jdbc().update(
-            "INSERT INTO migration_file_result " +
-            "(batch_id, relative_path, status, source_size, target_size, source_checksum, target_checksum, error_message, migrated_at) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            batchId,
-            relativePath,
-            status,
-            sourceSize,
-            targetSize,
-            sourceChecksum,
-            targetChecksum,
-            error,
-            Instant.now()
-        ));
+        target.write(() ->
+            target
+                .jdbc()
+                .update(
+                    "INSERT INTO migration_file_result " +
+                        "(batch_id, relative_path, status, source_size, target_size, source_checksum, target_checksum, error_message, migrated_at) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    batchId,
+                    relativePath,
+                    status,
+                    sourceSize,
+                    targetSize,
+                    sourceChecksum,
+                    targetChecksum,
+                    error,
+                    Timestamp.from(Instant.now())
+                )
+        );
     }
 
     private Path requiredRoot(String value, String environmentVariable) {

@@ -6,6 +6,7 @@ import com.hazelcast.core.HazelcastInstance;
 import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.server.autoconfigure.ServerProperties;
 import org.springframework.cache.CacheManager;
@@ -28,13 +29,13 @@ public class CacheConfiguration {
 
     private final Environment env;
 
-    private final ServerProperties serverProperties;
+    private final ObjectProvider<ServerProperties> serverProperties;
 
     private final DiscoveryClient discoveryClient;
 
     private Registration registration;
 
-    public CacheConfiguration(Environment env, ServerProperties serverProperties, DiscoveryClient discoveryClient) {
+    public CacheConfiguration(Environment env, ObjectProvider<ServerProperties> serverProperties, DiscoveryClient discoveryClient) {
         this.env = env;
         this.serverProperties = serverProperties;
         this.discoveryClient = discoveryClient;
@@ -81,7 +82,7 @@ public class CacheConfiguration {
                     "Application is running with the \"dev\" profile, Hazelcast " + "cluster will only work with localhost instances"
                 );
 
-                config.getNetworkConfig().setPort(serverProperties.getPort() + 5701);
+                config.getNetworkConfig().setPort(serverProperties.getObject().getPort() + 5701);
                 config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(true);
                 for (ServiceInstance instance : discoveryClient.getInstances(serviceId)) {
                     String clusterMember = "127.0.0.1:" + (instance.getPort() + 5701);

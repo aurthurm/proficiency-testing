@@ -132,3 +132,5 @@ WHERE batch_id = :batch_id
 ```
 
 Only a batch whose `migration_batch.status` is `COMPLETED` and whose `migration_error` count is zero is eligible for cutover. `COMPLETED_WITH_ERRORS` and `FAILED` are never acceptable.
+
+See [`DRY_RUN.md`](./DRY_RUN.md) for the log of the first full end-to-end run of this process (archive, typed promotion, file migration) and [`KNOWN_GAPS.md`](./KNOWN_GAPS.md) for the legacy data-quality gaps found during it, and why they are expected rather than defects.

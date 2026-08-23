@@ -1,6 +1,7 @@
 package zw.org.nmrl.ept.migration;
 
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,10 +51,7 @@ public class LegacyMigrationReconciliationService {
     private final MigrationTarget target;
     private final ApplicationProperties.Migration properties;
 
-    public LegacyMigrationReconciliationService(
-        MigrationTarget target,
-        ApplicationProperties applicationProperties
-    ) {
+    public LegacyMigrationReconciliationService(MigrationTarget target, ApplicationProperties applicationProperties) {
         this.target = target;
         this.properties = applicationProperties.getMigration();
     }
@@ -90,7 +88,7 @@ public class LegacyMigrationReconciliationService {
         }
         target.jdbc().query(
             "SELECT source_table, status, source_rows, archived_rows, stale_rows, table_checksum " +
-            "FROM migration_table_result WHERE batch_id = ?",
+                "FROM migration_table_result WHERE batch_id = ?",
             result -> {
                 String table = result.getString("source_table");
                 long sourceRows = result.getLong("source_rows");
@@ -101,11 +99,7 @@ public class LegacyMigrationReconciliationService {
                     table,
                     batchId
                 );
-                if (
-                    !"COMPLETED".equals(result.getString("status")) ||
-                    sourceRows != archivedRows ||
-                    sourceRows != actualArchiveRows
-                ) {
+                if (!"COMPLETED".equals(result.getString("status")) || sourceRows != archivedRows || sourceRows != actualArchiveRows) {
                     issues.add(
                         new MigrationReconciliationIssue(
                             "ARCHIVE_COUNT",
@@ -159,8 +153,9 @@ public class LegacyMigrationReconciliationService {
                 batchId
             );
             long resolvableRows = count(
-                "SELECT COUNT(*) FROM migration_id_map m JOIN " + mapping.targetTable() +
-                " t ON t.id = m.target_id WHERE m.source_table = ? AND m.target_table = ? AND m.migration_batch_id = ?",
+                "SELECT COUNT(*) FROM migration_id_map m JOIN " +
+                    mapping.targetTable() +
+                    " t ON t.id = m.target_id WHERE m.source_table = ? AND m.target_table = ? AND m.migration_batch_id = ?",
                 mapping.sourceTable(),
                 mapping.targetTable(),
                 batchId
@@ -172,7 +167,10 @@ public class LegacyMigrationReconciliationService {
                         mapping.sourceTable(),
                         sourceRows,
                         resolvableRows,
-                        "Expected one resolvable typed " + mapping.targetTable() + " identity mapping per archived source row; maps=" + mappedRows
+                        "Expected one resolvable typed " +
+                            mapping.targetTable() +
+                            " identity mapping per archived source row; maps=" +
+                            mappedRows
                     )
                 );
             }
@@ -198,11 +196,7 @@ public class LegacyMigrationReconciliationService {
                 String status = result.getString("status");
                 String sourceChecksum = result.getString("source_checksum");
                 String targetChecksum = result.getString("target_checksum");
-                if (
-                    !List.of("COPIED", "UNCHANGED").contains(status) ||
-                    sourceChecksum == null ||
-                    !sourceChecksum.equals(targetChecksum)
-                ) {
+                if (!List.of("COPIED", "UNCHANGED").contains(status) || sourceChecksum == null || !sourceChecksum.equals(targetChecksum)) {
                     issues.add(
                         new MigrationReconciliationIssue(
                             "FILE_CHECKSUM",
@@ -224,31 +218,26 @@ public class LegacyMigrationReconciliationService {
             issues,
             "participant_manager_map",
             "SELECT COUNT(*) FROM legacy_record_archive a " +
-            "LEFT JOIN data_manager d ON d.legacy_source_id = a.payload::jsonb ->> 'dm_id' " +
-            "LEFT JOIN participant p ON p.legacy_source_id = a.payload::jsonb ->> 'participant_id' " +
-            "WHERE a.source_table = 'participant_manager_map' AND a.last_seen_batch_id = ? " +
-            "AND (d.id IS NULL OR p.id IS NULL OR NOT EXISTS (SELECT 1 FROM rel_data_manager__participants r " +
-            "WHERE r.data_manager_id = d.id AND r.participants_id = p.id))"
+                "LEFT JOIN data_manager d ON d.legacy_source_id = a.payload::jsonb ->> 'dm_id' " +
+                "LEFT JOIN participant p ON p.legacy_source_id = a.payload::jsonb ->> 'participant_id' " +
+                "WHERE a.source_table = 'participant_manager_map' AND a.last_seen_batch_id = ? " +
+                "AND (d.id IS NULL OR p.id IS NULL OR NOT EXISTS (SELECT 1 FROM rel_data_manager__participants r " +
+                "WHERE r.data_manager_id = d.id AND r.participants_id = p.id))"
         );
         reconcileRelationship(
             batchId,
             issues,
             "ptcc_countries_map",
             "SELECT COUNT(*) FROM legacy_record_archive a " +
-            "LEFT JOIN data_manager d ON d.legacy_source_id = a.payload::jsonb ->> 'ptcc_id' " +
-            "LEFT JOIN country c ON c.legacy_source_id = a.payload::jsonb ->> 'country_id' " +
-            "WHERE a.source_table = 'ptcc_countries_map' AND a.last_seen_batch_id = ? " +
-            "AND (d.id IS NULL OR c.id IS NULL OR NOT EXISTS (SELECT 1 FROM rel_data_manager__ptcc_countries r " +
-            "WHERE r.data_manager_id = d.id AND r.country_id = c.id))"
+                "LEFT JOIN data_manager d ON d.legacy_source_id = a.payload::jsonb ->> 'ptcc_id' " +
+                "LEFT JOIN country c ON c.legacy_source_id = a.payload::jsonb ->> 'country_id' " +
+                "WHERE a.source_table = 'ptcc_countries_map' AND a.last_seen_batch_id = ? " +
+                "AND (d.id IS NULL OR c.id IS NULL OR NOT EXISTS (SELECT 1 FROM rel_data_manager__ptcc_countries r " +
+                "WHERE r.data_manager_id = d.id AND r.country_id = c.id))"
         );
     }
 
-    private void reconcileRelationship(
-        UUID batchId,
-        List<MigrationReconciliationIssue> issues,
-        String sourceTable,
-        String missingSql
-    ) {
+    private void reconcileRelationship(UUID batchId, List<MigrationReconciliationIssue> issues, String sourceTable, String missingSql) {
         long missing = count(missingSql, batchId);
         if (missing != 0) {
             long sourceRows = count(
@@ -271,10 +260,10 @@ public class LegacyMigrationReconciliationService {
     private void reconcileSchemeResults(UUID batchId, List<MigrationReconciliationIssue> issues) {
         long sourceRows = count(
             "WITH scheme_tables AS (" +
-            "SELECT payload::jsonb ->> 'response_table' response_table, payload::jsonb ->> 'reference_result_table' reference_table " +
-            "FROM legacy_record_archive WHERE source_table = 'scheme_list' AND last_seen_batch_id = ?) " +
-            "SELECT COUNT(*) FROM legacy_record_archive a WHERE a.last_seen_batch_id = ? AND EXISTS (" +
-            "SELECT 1 FROM scheme_tables s WHERE a.source_table = s.response_table OR a.source_table = s.reference_table)",
+                "SELECT payload::jsonb ->> 'response_table' response_table, payload::jsonb ->> 'reference_result_table' reference_table " +
+                "FROM legacy_record_archive WHERE source_table = 'scheme_list' AND last_seen_batch_id = ?) " +
+                "SELECT COUNT(*) FROM legacy_record_archive a WHERE a.last_seen_batch_id = ? AND EXISTS (" +
+                "SELECT 1 FROM scheme_tables s WHERE a.source_table = s.response_table OR a.source_table = s.reference_table)",
             batchId,
             batchId
         );
@@ -284,7 +273,7 @@ public class LegacyMigrationReconciliationService {
         );
         long resolvableRows = count(
             "SELECT COUNT(*) FROM migration_id_map m JOIN legacy_scheme_result r ON r.id = m.target_id " +
-            "WHERE m.target_table = 'legacy_scheme_result' AND m.migration_batch_id = ?",
+                "WHERE m.target_table = 'legacy_scheme_result' AND m.migration_batch_id = ?",
             batchId
         );
         if (sourceRows != typedRows || typedRows != resolvableRows) {
@@ -308,13 +297,13 @@ public class LegacyMigrationReconciliationService {
         long expectedTemplates = sourceRows * 2;
         long templates = count(
             "SELECT COUNT(*) FROM migration_id_map WHERE source_table = 'certificate_templates' " +
-            "AND target_table = 'certificate_template' AND migration_batch_id = ?",
+                "AND target_table = 'certificate_template' AND migration_batch_id = ?",
             batchId
         );
         long resolvable = count(
             "SELECT COUNT(*) FROM migration_id_map m JOIN certificate_template t ON t.id = m.target_id " +
-            "WHERE m.source_table = 'certificate_templates' AND m.target_table = 'certificate_template' " +
-            "AND m.migration_batch_id = ?",
+                "WHERE m.source_table = 'certificate_templates' AND m.target_table = 'certificate_template' " +
+                "AND m.migration_batch_id = ?",
             batchId
         );
         if (expectedTemplates != templates || templates != resolvable) {
@@ -337,25 +326,32 @@ public class LegacyMigrationReconciliationService {
 
     private String archiveChecksum(String table, UUID batchId) {
         BigInteger[] checksum = { BigInteger.ZERO };
-        target.jdbc().query(
-            "SELECT row_checksum FROM legacy_record_archive WHERE source_table = ? AND last_seen_batch_id = ?",
-            result -> checksum[0] = checksum[0].add(new BigInteger(result.getString(1), 16)).and(CHECKSUM_MASK),
-            table,
-            batchId
-        );
-        return String.format("%064x", checksum[0]);
+        target
+            .jdbc()
+            .query(
+                "SELECT row_checksum FROM legacy_record_archive WHERE source_table = ? AND last_seen_batch_id = ?",
+                (org.springframework.jdbc.core.RowCallbackHandler) result ->
+                    checksum[0] = checksum[0].add(new BigInteger(result.getString(1), 16)).and(CHECKSUM_MASK),
+                table,
+                batchId
+            );
+        return "%064x".formatted(checksum[0]);
     }
 
     private void record(UUID batchId, MigrationReconciliationIssue issue) {
-        target.write(() -> target.jdbc().update(
-            "INSERT INTO migration_error " +
-            "(batch_id, source_table, stage, error_type, error_message, created_at) VALUES (?, ?, 'RECONCILE', ?, ?, ?)",
-            batchId,
-            issue.sourceTable(),
-            issue.category(),
-            issue.detail() + "; expected=" + issue.expected() + ", actual=" + issue.actual(),
-            Instant.now()
-        ));
+        target.write(() ->
+            target
+                .jdbc()
+                .update(
+                    "INSERT INTO migration_error " +
+                        "(batch_id, source_table, stage, error_type, error_message, created_at) VALUES (?, ?, 'RECONCILE', ?, ?, ?)",
+                    batchId,
+                    issue.sourceTable(),
+                    issue.category(),
+                    issue.detail() + "; expected=" + issue.expected() + ", actual=" + issue.actual(),
+                    Timestamp.from(Instant.now())
+                )
+        );
     }
 
     private record CoreMapping(String sourceTable, String targetTable) {}

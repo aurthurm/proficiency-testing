@@ -10,6 +10,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -167,7 +168,7 @@ public class LegacyBatchMigrationService {
     }
 
     private LegacyTableMigrationSummary archiveTable(UUID batchId, String table) {
-        Instant startedAt = Instant.now();
+        Timestamp startedAt = Timestamp.from(Instant.now());
         startTable(batchId, table, startedAt);
         try (Connection source = legacySource.getConnection()) {
             List<String> primaryKeys = primaryKeys(source, table);
@@ -192,20 +193,18 @@ public class LegacyBatchMigrationService {
                         String sourcePrimaryKeyJson = objectMapper.writeValueAsString(sourcePrimaryKey);
                         String sourcePrimaryKeyHash = sha256(sourcePrimaryKeyJson);
                         tableChecksum = tableChecksum.add(new BigInteger(rowChecksum, 16)).and(CHECKSUM_MASK);
-                        Instant now = Instant.now();
-                        writeBatch.add(
-                            new Object[] {
-                                table,
-                                sourcePrimaryKeyJson,
-                                sourcePrimaryKeyHash,
-                                payloadJson,
-                                rowChecksum,
-                                batchId,
-                                batchId,
-                                now,
-                                now,
-                            }
-                        );
+                        Timestamp now = Timestamp.from(Instant.now());
+                        writeBatch.add(new Object[] {
+                            table,
+                            sourcePrimaryKeyJson,
+                            sourcePrimaryKeyHash,
+                            payloadJson,
+                            rowChecksum,
+                            batchId,
+                            batchId,
+                            now,
+                            now,
+                        });
                         if (writeBatch.size() >= properties.getBatchSize()) {
                             archivedRows += flush(writeBatch);
                         }
@@ -214,7 +213,7 @@ public class LegacyBatchMigrationService {
             }
             archivedRows += flush(writeBatch);
             long staleRows = countStaleRows(table, batchId);
-            String checksum = String.format("%064x", tableChecksum);
+            String checksum = "%064x".formatted(tableChecksum);
             LegacyTableMigrationSummary summary = new LegacyTableMigrationSummary(
                 table,
                 "COMPLETED",
@@ -284,8 +283,16 @@ public class LegacyBatchMigrationService {
 
     private List<String> selectTables(List<String> availableTables) {
         Set<String> requested = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
-        properties.getIncludeTables().stream().map(String::trim).filter(value -> !value.isEmpty()).forEach(requested::add);
-        List<String> tables = availableTables.stream().filter(table -> requested.isEmpty() || requested.contains(table)).toList();
+        properties
+            .getIncludeTables()
+            .stream()
+            .map(String::trim)
+            .filter(value -> !value.isEmpty())
+            .forEach(requested::add);
+        List<String> tables = availableTables
+            .stream()
+            .filter(table -> requested.isEmpty() || requested.contains(table))
+            .toList();
         if (!requested.isEmpty()) {
             Set<String> missing = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
             missing.addAll(requested);
@@ -380,7 +387,9 @@ public class LegacyBatchMigrationService {
     }
 
     private void validateSource(String sourceVersion, List<String> discoveredTables) {
-        List<String> supportedVersions = properties.getSupportedSourceVersions().stream()
+        List<String> supportedVersions = properties
+            .getSupportedSourceVersions()
+            .stream()
             .map(String::trim)
             .filter(value -> !value.isEmpty())
             .toList();
@@ -396,7 +405,9 @@ public class LegacyBatchMigrationService {
         Set<String> available = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
         available.addAll(discoveredTables);
         Set<String> missing = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
-        properties.getRequiredSourceTables().stream()
+        properties
+            .getRequiredSourceTables()
+            .stream()
             .map(String::trim)
             .filter(value -> !value.isEmpty())
             .filter(table -> !available.contains(table))
@@ -418,75 +429,97 @@ public class LegacyBatchMigrationService {
     }
 
     private void startBatch(UUID id, String sourceVersion, String sourceDatabase, int tableCount) {
-        target.write(() -> target.jdbc().update(
-            "INSERT INTO migration_batch (id, source_version, source_database, status, started_at, tables_discovered) VALUES (?, ?, ?, 'RUNNING', ?, ?)",
-            id,
-            sourceVersion,
-            sourceDatabase,
-            Instant.now(),
-            tableCount
-        ));
+        target.write(() ->
+            target
+                .jdbc()
+                .update(
+                    "INSERT INTO migration_batch (id, source_version, source_database, status, started_at, tables_discovered) VALUES (?, ?, ?, 'RUNNING', ?, ?)",
+                    id,
+                    sourceVersion,
+                    sourceDatabase,
+                    Timestamp.from(Instant.now()),
+                    tableCount
+                )
+        );
     }
 
     private void completeBatch(UUID id, String status, int tablesCompleted, long rowsArchived, long errors, String notes) {
-        target.write(() -> target.jdbc().update(
-            "UPDATE migration_batch SET status = ?, completed_at = ?, tables_completed = ?, rows_archived = ?, error_count = ?, notes = ? WHERE id = ?",
-            status,
-            Instant.now(),
-            tablesCompleted,
-            rowsArchived,
-            errors,
-            notes,
-            id
-        ));
+        target.write(() ->
+            target
+                .jdbc()
+                .update(
+                    "UPDATE migration_batch SET status = ?, completed_at = ?, tables_completed = ?, rows_archived = ?, error_count = ?, notes = ? WHERE id = ?",
+                    status,
+                    Timestamp.from(Instant.now()),
+                    tablesCompleted,
+                    rowsArchived,
+                    errors,
+                    notes,
+                    id
+                )
+        );
     }
 
-    private void startTable(UUID batchId, String table, Instant startedAt) {
-        target.write(() -> target.jdbc().update(
-            "INSERT INTO migration_table_result (batch_id, source_table, status, started_at) VALUES (?, ?, 'RUNNING', ?)",
-            batchId,
-            table,
-            startedAt
-        ));
+    private void startTable(UUID batchId, String table, Timestamp startedAt) {
+        target.write(() ->
+            target
+                .jdbc()
+                .update(
+                    "INSERT INTO migration_table_result (batch_id, source_table, status, started_at) VALUES (?, ?, 'RUNNING', ?)",
+                    batchId,
+                    table,
+                    startedAt
+                )
+        );
     }
 
     private void finishTable(UUID batchId, LegacyTableMigrationSummary summary) {
-        target.write(() -> target.jdbc().update(
-            "UPDATE migration_table_result SET status = ?, source_rows = ?, archived_rows = ?, stale_rows = ?, table_checksum = ?, completed_at = ?, error_message = ? WHERE batch_id = ? AND source_table = ?",
-            summary.status(),
-            summary.sourceRows(),
-            summary.archivedRows(),
-            summary.staleRows(),
-            summary.checksum(),
-            Instant.now(),
-            summary.errorMessage(),
-            batchId,
-            summary.table()
-        ));
+        target.write(() ->
+            target
+                .jdbc()
+                .update(
+                    "UPDATE migration_table_result SET status = ?, source_rows = ?, archived_rows = ?, stale_rows = ?, table_checksum = ?, completed_at = ?, error_message = ? WHERE batch_id = ? AND source_table = ?",
+                    summary.status(),
+                    summary.sourceRows(),
+                    summary.archivedRows(),
+                    summary.staleRows(),
+                    summary.checksum(),
+                    Timestamp.from(Instant.now()),
+                    summary.errorMessage(),
+                    batchId,
+                    summary.table()
+                )
+        );
     }
 
     private long countStaleRows(String table, UUID batchId) {
-        Long value = target.jdbc().queryForObject(
-            "SELECT COUNT(*) FROM legacy_record_archive WHERE source_table = ? AND last_seen_batch_id <> ?",
-            Long.class,
-            table,
-            batchId
-        );
+        Long value = target
+            .jdbc()
+            .queryForObject(
+                "SELECT COUNT(*) FROM legacy_record_archive WHERE source_table = ? AND last_seen_batch_id <> ?",
+                Long.class,
+                table,
+                batchId
+            );
         return value == null ? 0 : value;
     }
 
     private void recordError(UUID batchId, String table, String sourcePrimaryKey, String stage, Exception error, String payload) {
-        target.write(() -> target.jdbc().update(
-            "INSERT INTO migration_error (batch_id, source_table, source_primary_key, stage, error_type, error_message, payload, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-            batchId,
-            table,
-            sourcePrimaryKey,
-            stage,
-            error.getClass().getName(),
-            error.getMessage() == null ? error.toString() : error.getMessage(),
-            payload,
-            Instant.now()
-        ));
+        target.write(() ->
+            target
+                .jdbc()
+                .update(
+                    "INSERT INTO migration_error (batch_id, source_table, source_primary_key, stage, error_type, error_message, payload, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                    batchId,
+                    table,
+                    sourcePrimaryKey,
+                    stage,
+                    error.getClass().getName(),
+                    error.getMessage() == null ? error.toString() : error.getMessage(),
+                    payload,
+                    Timestamp.from(Instant.now())
+                )
+        );
     }
 
     private record LegacyColumn(String name, int jdbcType) {}

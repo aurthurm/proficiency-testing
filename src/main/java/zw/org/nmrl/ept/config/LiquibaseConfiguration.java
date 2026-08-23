@@ -34,13 +34,13 @@ public class LiquibaseConfiguration {
         @Qualifier("taskExecutor") Executor executor,
         LiquibaseProperties liquibaseProperties,
         @LiquibaseDataSource ObjectProvider<DataSource> liquibaseDataSource,
-        ObjectProvider<DataSource> dataSource,
+        @Qualifier("dataSource") ObjectProvider<DataSource> dataSource,
         ApplicationProperties applicationProperties,
         DataSourceProperties dataSourceProperties
     ) {
         SpringLiquibase liquibase;
-        boolean asyncStart = Boolean.TRUE.equals(applicationProperties.getLiquibase().getAsyncStart()) &&
-            !applicationProperties.getMigration().isEnabled();
+        boolean asyncStart =
+            Boolean.TRUE.equals(applicationProperties.getLiquibase().getAsyncStart()) && !applicationProperties.getMigration().isEnabled();
         if (asyncStart) {
             liquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(
                 this.env,

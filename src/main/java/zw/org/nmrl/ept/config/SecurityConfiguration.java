@@ -2,6 +2,7 @@ package zw.org.nmrl.ept.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -41,7 +42,13 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * {@link HttpSecurity} is only registered for a real servlet web application. Migration mode
+     * runs headless ({@code spring.main.web-application-type=none}) with no HTTP server, so this
+     * filter chain has nothing to serve and must not be created there.
+     */
     @Bean
+    @ConditionalOnProperty(prefix = "application.migration", name = "enabled", havingValue = "false", matchIfMissing = true)
     public SecurityFilterChain filterChain(HttpSecurity http) {
         http.cors(withDefaults())
             .csrf(csrf -> csrf.disable())

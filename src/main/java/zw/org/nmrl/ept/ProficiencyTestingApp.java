@@ -14,13 +14,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.h2console.autoconfigure.H2ConsoleAutoConfiguration;
 import org.springframework.boot.liquibase.autoconfigure.LiquibaseProperties;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.core.env.Environment;
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
 import zw.org.nmrl.ept.config.ApplicationProperties;
 import zw.org.nmrl.ept.config.CRLFLogConverter;
+import zw.org.nmrl.ept.config.MigrationWebLayerExcludeFilter;
 
 @SpringBootApplication(exclude = { H2ConsoleAutoConfiguration.class })
+@ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.CUSTOM, classes = MigrationWebLayerExcludeFilter.class))
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
 public class ProficiencyTestingApp {
 

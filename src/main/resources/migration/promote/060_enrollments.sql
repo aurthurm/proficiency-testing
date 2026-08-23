@@ -15,7 +15,7 @@ WITH promoted AS (
         NULL,
         p.id,
         s.id,
-        e.payload::jsonb ->> 'enrollment_id',
+        (e.payload::jsonb ->> 'list_name') || ':' || (e.payload::jsonb ->> 'participant_id'),
         e.payload
     FROM legacy_record_archive e
     JOIN participant p ON p.legacy_source_id = e.payload::jsonb ->> 'participant_id'
